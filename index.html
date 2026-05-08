@@ -3,204 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#07110c">
+<meta name="theme-color" content="#06110d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>ONTH Daily Scorecard</title>
+<title>DSP Daily Scorecard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  color-scheme:dark;
-  --bg:#050906;
-  --page-bg:
-    radial-gradient(circle at 18% 0%,rgba(22,101,52,.16),transparent 34%),
-    radial-gradient(circle at 82% 10%,rgba(34,197,94,.06),transparent 30%),
-    linear-gradient(180deg,#07110c 0%,#050906 46%,#030604 100%);
-  --surface:#0b1510;
-  --surface-2:#0f1d15;
-  --text:#eef7ef;
-  --text-soft:#c8d6cb;
-  --text-muted:#849589;
-  --text-dim:#536157;
-  --accent:#34d399;
-  --accent-2:#16a34a;
-  --accent-rgb:52,211,153;
-  --accent-bg:rgba(34,197,94,.105);
-  --accent-bd:rgba(52,211,153,.30);
-  --accent-bd-strong:rgba(52,211,153,.58);
-  --accent-dim:#6ee7b7;
-  --border-main:rgba(134,239,172,.16);
-  --border-soft:rgba(134,239,172,.22);
-  --success:#34d399;
-  --success-rgb:52,211,153;
-  --success-bg:rgba(34,197,94,.105);
-  --success-bd:rgba(52,211,153,.32);
-  --warning:#fbbf24;
-  --warning-rgb:251,191,36;
-  --warning-bg:rgba(251,191,36,.10);
-  --warning-bd:rgba(251,191,36,.28);
-  --danger:#fb7185;
-  --danger-rgb:251,113,133;
-  --danger-bg:rgba(244,63,94,.10);
-  --danger-bd:rgba(251,113,133,.30);
-  --radius-md:12px;
-  --shadow-lg:0 22px 70px rgba(0,0,0,.44);
+  --bg:#06110d;
+  --page-bg:#06110d;
+  --surface:#0a1712;
+  --card-surface:#0d1d17;
+  --text:#f2fbf6;
+  --text-soft:#c8d8cf;
+  --text-muted:#82978d;
+  --text-dim:#52655c;
+  --accent:#18c987;
+  --accent-2:#7ee6b8;
+  --accent-dim:#7acaa9;
+  --accent-rgb:24,201,135;
+  --accent-bg:rgba(24,201,135,.12);
+  --accent-bd:rgba(24,201,135,.28);
+  --accent-bd-strong:rgba(24,201,135,.58);
+  --success:#2fe59a;
+  --success-rgb:47,229,154;
+  --success-bg:rgba(47,229,154,.10);
+  --success-bd:rgba(47,229,154,.28);
+  --warning:#f2c95c;
+  --warning-rgb:242,201,92;
+  --warning-bg:rgba(242,201,92,.10);
+  --warning-bd:rgba(242,201,92,.30);
+  --danger:#ff6f72;
+  --danger-bg:rgba(255,111,114,.10);
+  --danger-bd:rgba(255,111,114,.30);
+  --border-main:rgba(113,145,128,.22);
+  --border-soft:rgba(113,145,128,.16);
+  --radius-md:8px;
+  --shadow-lg:0 22px 70px rgba(0,0,0,.38);
 }
-@keyframes dsp-nameReveal{from{opacity:0;transform:translateY(10px);filter:blur(3px);}to{opacity:1;transform:none;filter:none;}}
-@keyframes dsp-fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;background:var(--bg);}
 body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;padding-bottom:env(safe-area-inset-bottom);}
 
+/* SEARCH */
+#searchPage{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;padding:40px 20px;}
+#searchPage.active{display:flex;}
+.search-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,10vw,64px);letter-spacing:.04em;color:var(--text);margin-bottom:6px;}
+.search-logo span,.footer-logo span{color:var(--accent);}
+.search-sub,.search-hint,.search-empty,.search-loading{font-family:'DM Mono',monospace;text-transform:uppercase;}
+.search-sub{font-size:10px;letter-spacing:.22em;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);padding:5px 14px;border-radius:var(--radius-md);margin-bottom:40px;}
+.search-box{width:100%;max-width:480px;position:relative;}
+.search-input{width:100%;background:rgba(12,28,22,.96);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px 18px 14px 48px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--accent-bd-strong);}
+.search-input::placeholder{color:var(--text-dim);}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:rgba(9,20,16,.98);border:1px solid var(--border-soft);border-radius:var(--radius-md);overflow:hidden;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.4);max-height:320px;overflow-y:auto;}
+.search-result-item{padding:11px 18px;cursor:pointer;font-size:14px;color:var(--text);transition:background .12s;border-bottom:1px solid rgba(113,145,128,.12);display:flex;align-items:center;gap:10px;}
+.search-result-item:last-child{border-bottom:none;}
+.search-result-item:hover,.search-result-item.focused{background:rgba(var(--accent-rgb),.08);color:var(--accent);}
+.search-result-item svg{flex-shrink:0;color:var(--text-muted);}
+.search-hint{font-size:9px;letter-spacing:.14em;color:var(--text-dim);margin-top:12px;text-align:center;}
+.search-empty,.search-loading{padding:20px 18px;font-size:10px;letter-spacing:.08em;text-align:center;}
+.search-empty{color:var(--text-muted);}
+.search-loading{color:var(--accent);}
+
 /* HERO */
-.hero-card{position:relative;background:linear-gradient(135deg,rgba(10,24,16,.97),rgba(4,9,6,.99)),var(--surface);border-bottom:1px solid var(--border-soft);box-shadow:var(--shadow-lg);overflow:hidden;}
-.hero-card::before{content:'';position:absolute;top:-60px;left:-80px;width:420px;height:420px;background:conic-gradient(from 200deg at 30% 40%,rgba(var(--accent-rgb),0.18) 0deg,rgba(var(--accent-rgb),0.04) 60deg,transparent 90deg);pointer-events:none;opacity:.9;filter:blur(.2px);}
+#scorecardPage{display:none;}
+#scorecardPage.active{display:block;}
+.hero-card{position:relative;background:linear-gradient(135deg,rgba(10,23,18,.96),rgba(6,17,13,.98)),var(--surface);border-bottom:1px solid var(--border-soft);box-shadow:var(--shadow-lg);overflow:hidden;}
 .hero-card::after{content:'';position:absolute;bottom:0;right:0;width:100%;height:2px;background:linear-gradient(90deg,transparent 0%,var(--accent) 40%,var(--accent-2) 60%,transparent 100%);opacity:.85;}
-.hero-grid{display:none;}
 .hero-inner{position:relative;z-index:2;padding:32px 20px 28px;max-width:980px;margin:0 auto;}
 .hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
-.hero-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);padding:5px 12px;border-radius:var(--radius-md);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
-.hero-date-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
-.hero-name-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:4px;}
-.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,13vw,88px);line-height:0.88;letter-spacing:0.02em;color:var(--text);text-shadow:0 2px 40px rgba(var(--accent-rgb),0.12);animation:dsp-nameReveal .7s ease both;margin-bottom:16px;text-wrap:balance;}
+.hero-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);padding:5px 12px;border-radius:var(--radius-md);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+.hero-date-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);}
+.hero-name-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:4px;}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,13vw,88px);line-height:.88;letter-spacing:.02em;color:var(--text);text-shadow:0 2px 40px rgba(var(--accent-rgb),.12);animation:dsp-nameReveal .7s ease both;margin-bottom:18px;text-wrap:balance;}
 .hero-score-row{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;}
-.score-ring-wrap{position:relative;width:96px;height:96px;flex-shrink:0;}
-.score-ring-wrap svg{width:96px;height:96px;transform:rotate(-90deg);filter:drop-shadow(0 0 12px rgba(var(--accent-rgb),0.30));}
-.ring-track{fill:none;stroke:var(--border-main);stroke-width:7;}
+.score-ring-wrap,.weekly-ring-wrap{position:relative;flex-shrink:0;}
+.score-ring-wrap,.score-ring-wrap svg{width:96px;height:96px;}
+.score-ring-wrap svg,.weekly-ring-wrap svg{transform:rotate(-90deg);filter:drop-shadow(0 0 12px rgba(var(--accent-rgb),.3));}
+.ring-track,.weekly-ring-track{fill:none;stroke:var(--border-main);}
+.ring-track{stroke-width:7;}
 .ring-fill{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-dasharray:264;stroke-dashoffset:264;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ring-score{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--accent);letter-spacing:0.02em;}
-.ring-label{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+.ring-center,.weekly-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-score{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--accent);letter-spacing:.02em;}
+.ring-label,.weekly-ring-label{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);}
 .score-meta{display:flex;flex-direction:column;gap:8px;}
 .score-rank-pill{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,rgba(var(--accent-rgb),.09),rgba(var(--accent-rgb),.035));border:1px solid var(--accent-bd);border-radius:var(--radius-md);padding:6px 12px;width:fit-content;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
 .rank-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);line-height:1;}
-.rank-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;line-height:1.3;}
-.score-top-pct{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
+.rank-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase;line-height:1.3;}
+.score-top-pct{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);}
 .score-top-pct span{color:var(--accent);}
-.no-data-banner{background:var(--danger-bg);border:1px solid var(--danger-bd);border-radius:var(--radius-md);padding:10px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--danger);letter-spacing:0.06em;text-align:center;margin-top:12px;}
+.no-data-banner{background:var(--danger-bg);border:1px solid var(--danger-bd);border-radius:var(--radius-md);padding:10px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--danger);letter-spacing:.06em;text-align:center;margin-top:12px;}
 
-/* HERO ACTIONS */
-.hero-actions{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
-.hero-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:rgba(var(--accent-rgb),.075);border:1px solid var(--accent-bd);padding:8px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-radius:var(--radius-md);transition:background .18s ease,transform .18s ease,border-color .18s ease;}
-.hero-action:hover{background:rgba(var(--accent-rgb),.14);border-color:var(--accent-bd-strong);transform:translateY(-1px);}
-.hero-action svg{flex:0 0 auto;}
-
-/* TAB BAR */
-.tab-bar{position:sticky;top:0;z-index:100;background:rgba(5,12,8,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-main);display:flex;gap:0;box-shadow:0 10px 30px rgba(0,0,0,.22);}
-.tab-btn{flex:1;padding:13px 10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:color .2s,border-color .2s;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;justify-content:center;gap:6px;position:relative;}
+/* TABS */
+.tab-bar{position:sticky;top:0;z-index:100;background:rgba(7,18,14,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-main);display:flex;gap:0;box-shadow:0 10px 30px rgba(0,0,0,.22);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{flex:0 0 auto;padding:13px 14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:color .2s,border-color .2s;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;justify-content:center;gap:6px;position:relative;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(var(--accent-rgb),.045);}
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
-
-/* WRAPPER */
 .wrapper{max-width:920px;margin:0 auto;padding:0 14px 80px;}
 
-/* SECTION HEADER */
+/* SECTIONS */
 .section-header{display:flex;align-items:center;gap:12px;margin:30px 0 10px;}
 .section-icon{width:32px;height:32px;flex-shrink:0;background:linear-gradient(180deg,rgba(var(--accent-rgb),.10),rgba(var(--accent-rgb),.04));border:1px solid var(--accent-bd);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
 .section-icon svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .section-title-wrap{flex:1;}
-.section-eyebrow{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:1px;}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,34px);line-height:1;letter-spacing:0.03em;color:var(--text);}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,34px);line-height:1;letter-spacing:.03em;color:var(--text);}
 .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border-main),transparent);}
 
-/* METRIC LIST */
-.metric-list{background:linear-gradient(180deg,rgba(12,27,18,.97),rgba(7,15,10,.97));border:1px solid var(--border-soft);border-radius:var(--radius-md);overflow:hidden;box-shadow:0 10px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
-.metric-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid rgba(112,132,160,.12);transition:background .12s;gap:12px;}
+/* METRICS */
+.metric-list,.weekly-hero,.focus-card,.weekly-no-data{background:linear-gradient(180deg,rgba(12,28,22,.96),rgba(8,21,16,.96));border:1px solid var(--border-soft);box-shadow:0 10px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
+.metric-list{border-radius:var(--radius-md);overflow:hidden;}
+.metric-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid rgba(113,145,128,.12);transition:background .12s;gap:12px;}
 .metric-row:last-child{border-bottom:none;}
 .metric-row:hover{background:rgba(var(--accent-rgb),.045);}
 .metric-name{flex:1;font-size:13px;font-weight:500;color:var(--text);min-width:0;letter-spacing:.01em;}
-.metric-name .sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;display:block;margin-top:1px;}
-.metric-chip{font-family:'Bebas Neue',sans-serif;font-size:17px;line-height:1;padding:5px 12px;border-radius:var(--radius-md);min-width:78px;text-align:center;letter-spacing:0.04em;flex-shrink:0;border-width:1px;border-style:solid;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+.metric-name .sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:1px;}
+.metric-chip{font-family:'Bebas Neue',sans-serif;font-size:17px;line-height:1;padding:5px 12px;border-radius:var(--radius-md);min-width:78px;text-align:center;letter-spacing:.04em;flex-shrink:0;border-width:1px;border-style:solid;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
 .metric-chip.green{background:var(--success-bg);color:var(--success);border-color:var(--success-bd);}
 .metric-chip.amber{background:var(--warning-bg);color:var(--warning);border-color:var(--warning-bd);}
 .metric-chip.red{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-bd);}
-.metric-chip.neutral{background:rgba(255,255,255,0.04);color:var(--text);border-color:var(--border-main);}
-
-/* 2 COL */
+.metric-chip.neutral{background:rgba(255,255,255,.04);color:var(--text);border-color:var(--border-main);}
 .metric-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-/* ALERT */
-.metric-alert{background:var(--danger-bg);border:1px solid var(--danger-bd);border-radius:var(--radius-md);padding:10px 14px;font-size:11px;color:var(--danger);font-family:'DM Mono',monospace;letter-spacing:0.04em;line-height:1.5;margin-top:8px;display:flex;align-items:center;gap:6px;border-left-width:3px;}
+.metric-alert{background:var(--danger-bg);border:1px solid var(--danger-bd);border-left-width:3px;border-radius:var(--radius-md);padding:10px 14px;font-size:11px;color:var(--danger);font-family:'DM Mono',monospace;letter-spacing:.04em;line-height:1.5;margin-top:8px;display:flex;align-items:center;gap:6px;}
 .metric-alert.good{background:var(--success-bg);border-color:var(--success-bd);color:var(--success);}
 
 /* WEEKLY HERO */
-.weekly-hero{background:linear-gradient(180deg,rgba(12,27,18,.97),rgba(7,15,10,.97));border:1px solid var(--border-soft);border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px;margin-bottom:4px;box-shadow:0 10px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
-.weekly-ring-wrap{position:relative;width:80px;height:80px;flex-shrink:0;}
-.weekly-ring-wrap svg{width:80px;height:80px;transform:rotate(-90deg);filter:drop-shadow(0 0 10px rgba(var(--accent-rgb),0.25));}
+.weekly-hero{border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px;margin-bottom:4px;}
+.weekly-ring-wrap,.weekly-ring-wrap svg{width:80px;height:80px;}
 .weekly-ring-fill{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);}
-.weekly-ring-track{fill:none;stroke:var(--border-main);stroke-width:6;}
-.weekly-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.weekly-ring-track{stroke-width:6;}
 .weekly-ring-score{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;color:var(--accent);}
-.weekly-ring-label{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
 .weekly-hero-meta{flex:1;}
-.weekly-hero-week{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:4px;}
-.weekly-hero-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.04em;color:var(--text);line-height:1;}
-.weekly-hero-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:0.1em;margin-top:4px;}
+.weekly-hero-week{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:4px;}
+.weekly-hero-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.04em;color:var(--text);line-height:1;}
+.weekly-hero-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-top:4px;}
+.hero-rank-line{margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;}
+.hero-rank-line span{color:var(--accent);font-size:13px;}
 
-/* FOCUS */
+/* SUPPORTING BLOCKS */
 .focus-area{margin-top:8px;}
-.focus-card{background:linear-gradient(180deg,rgba(12,27,18,.97),rgba(7,15,10,.97));border:1px solid var(--border-soft);border-left:4px solid var(--accent);border-radius:var(--radius-md);padding:16px 18px;margin-bottom:8px;animation:dsp-fadeUp .4s ease both;box-shadow:0 10px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
-.focus-card-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.06em;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.focus-card{border-left:4px solid var(--accent);border-radius:var(--radius-md);padding:16px 18px;margin-bottom:8px;animation:dsp-fadeUp .4s ease both;}
+.focus-card-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
 .focus-card p{font-size:13px;color:var(--text-soft);line-height:1.7;}
 .all-good{background:var(--success-bg);border:1px solid var(--success-bd);border-radius:var(--radius-md);padding:16px 20px;display:flex;align-items:center;gap:14px;}
 .all-good-icon{font-size:28px;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center;}
-.all-good-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.05em;color:var(--success);line-height:1;margin-bottom:3px;}
-.all-good-sub{font-size:12px;color:rgba(var(--success-rgb),0.8);line-height:1.5;}
-
-/* NO DATA */
-.weekly-no-data{background:linear-gradient(180deg,rgba(12,27,18,.97),rgba(7,15,10,.97));border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:32px 20px;text-align:center;}
-.weekly-no-data-icon{color:var(--text-muted);margin-bottom:12px;opacity:0.4;display:flex;justify-content:center;}
+.all-good-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;color:var(--success);line-height:1;margin-bottom:3px;}
+.all-good-sub{font-size:12px;color:rgba(var(--success-rgb),.8);line-height:1.5;}
+.weekly-no-data{border-radius:var(--radius-md);padding:32px 20px;text-align:center;}
+.weekly-no-data-icon{color:var(--text-muted);margin-bottom:12px;opacity:.4;display:flex;justify-content:center;}
 .weekly-no-data-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.05em;color:var(--text-muted);margin-bottom:6px;}
-.weekly-no-data-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em;}
-
-/* FEEDBACK */
-.feedback-box{background:rgba(var(--warning-rgb),0.05);border:1px solid var(--warning-bd);border-radius:var(--radius-md);padding:12px 14px;margin-top:8px;font-size:12px;color:var(--warning);line-height:1.7;font-family:'DM Sans',sans-serif;}
-.feedback-box-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--warning);margin-bottom:6px;}
-
-/* DATE CARD */
+.weekly-no-data-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;}
+.feedback-box{background:rgba(var(--warning-rgb),.05);border:1px solid var(--warning-bd);border-radius:var(--radius-md);padding:12px 14px;margin-top:8px;font-size:12px;color:var(--warning);line-height:1.7;}
+.feedback-box-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--warning);margin-bottom:6px;}
 .date-card{background:linear-gradient(180deg,rgba(var(--accent-rgb),.075),rgba(var(--accent-rgb),.035));border:1px solid var(--accent-bd);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:14px;margin:24px 0 12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.045);}
 .date-card-icon{color:var(--accent);display:flex;}
 .date-card-label{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:2px;}
 .date-card-value{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.04em;color:var(--text);line-height:1;}
-
-/* YEARLY RANK GRID */
-.metric-rank-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;}
-@media(max-width:700px){.metric-rank-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:440px){.metric-rank-grid{grid-template-columns:repeat(2,1fr);}}
-
-/* REVEAL */
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease;}
 .reveal.visible{opacity:1;transform:none;}
-
-/* FOOTER */
 .footer{border-top:1px solid var(--border-main);padding:28px 16px;text-align:center;color:var(--text-muted);font-size:11px;margin-top:40px;}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.06em;color:var(--text);margin-bottom:4px;}
-.footer-logo span{color:var(--accent);}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;color:var(--text);margin-bottom:4px;}
 .footer-internal{margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--text-dim);}
 
-/* RESPONSIVE */
+@keyframes dsp-nameReveal{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@keyframes dsp-fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
 @media(max-width:560px){
   .metric-2col{grid-template-columns:1fr;}
   .hero-inner{padding:24px 16px 22px;}
   .hero-top{align-items:flex-start;}
   .hero-date-badge{width:100%;}
   .hero-name{font-size:clamp(42px,15vw,64px);}
-  .hero-actions{display:grid;grid-template-columns:1fr;}
-  .hero-action{width:100%;padding:9px 12px;}
   .score-ring-wrap,.score-ring-wrap svg{width:86px;height:86px;}
   .hero-score-row{gap:14px;}
-  .metric-chip{font-size:15px;min-width:60px;padding:3px 10px;}
+  .metric-chip{font-size:15px;min-width:64px;padding:3px 10px;}
   .metric-row{padding:10px 12px;}
   .metric-name{font-size:12px;}
   .wrapper{padding:0 10px 70px;}
   .weekly-hero{flex-direction:column;text-align:center;}
-  .tab-btn{font-size:9px;letter-spacing:.12em;padding:12px 6px;}
+  .tab-btn{font-size:9px;letter-spacing:.1em;padding:12px 10px;}
   .section-header{gap:9px;margin:26px 0 10px;}
   .section-icon{width:30px;height:30px;}
-  .metric-chip{min-width:64px;}
   .date-card{padding:11px 12px;gap:10px;}
 }
 @media(min-width:700px){
@@ -212,86 +200,294 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
 }
 </style>
 </head>
-<body>
 
-<div class="hero-card">
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-top">
-      <div class="hero-badge">DSJ5 · Scorecard</div>
-      <div class="hero-date-badge" id="heroDt">LOADING...</div>
-    </div>
-    <div class="hero-name-label">Driver</div>
-    <div class="hero-name" id="heroName">Loading...</div>
-    <div class="hero-actions">
-      <a class="hero-action" href="https://onth-bot.github.io/onth-dashboard/">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        ONTH Dashboard
-      </a>
-      <a class="hero-action" id="gamePlanBtn" href="#">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Your Daily Gameplan
-      </a>
-    </div>
-    <div class="hero-score-row" id="heroScoreRow" style="display:none;">
-      <div class="score-ring-wrap">
-        <svg viewBox="0 0 96 96">
-          <circle class="ring-track" cx="48" cy="48" r="42"/>
-          <circle class="ring-fill" id="ringFill" cx="48" cy="48" r="42"/>
-        </svg>
-        <div class="ring-center">
-          <div class="ring-score" id="ringScore">--</div>
-          <div class="ring-label">Score</div>
+<body>
+<div id="searchPage">
+  <div class="search-logo">Driver <span>Scorecard</span></div>
+  <div class="search-sub">DSP &middot; Driver Scorecard</div>
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="search-input" id="driverSearch" placeholder="Search driver name..." autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="search-results" id="searchResults" style="display:none;"></div>
+  </div>
+  <div class="search-hint">Type a name to find your scorecard</div>
+</div>
+
+<div id="scorecardPage">
+  <div class="hero-card">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div class="hero-badge">DSP &middot; Scorecard</div>
+        <div class="hero-date-badge" id="heroDt">LOADING...</div>
+      </div>
+
+      <div class="hero-name-label">Driver</div>
+      <div class="hero-name" id="heroName">Loading...</div>
+
+      <div class="hero-score-row" id="heroScoreRow" style="display:none;">
+        <div class="score-ring-wrap">
+          <svg viewBox="0 0 96 96">
+            <circle class="ring-track" cx="48" cy="48" r="42"/>
+            <circle class="ring-fill" id="ringFill" cx="48" cy="48" r="42"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-score" id="ringScore">--</div>
+            <div class="ring-label">Score</div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="score-rank-pill" id="rankPill" style="display:none;">
+            <div class="rank-num" id="rankNum">--</div>
+            <div class="rank-label">Rank<br>Overall</div>
+          </div>
+          <div class="score-top-pct" id="topPct"></div>
         </div>
       </div>
-      <div class="score-meta">
-        <div class="score-rank-pill" id="rankPill" style="display:none;">
-          <div class="rank-num" id="rankNum">--</div>
-          <div class="rank-label">Rank<br>Overall</div>
-        </div>
-        <div class="score-top-pct" id="topPct"></div>
+
+      <div id="noDataBanner" style="display:none;" class="no-data-banner">
+        No data found &middot; Check back after routes are completed
       </div>
-    </div>
-    <div id="noDataBanner" style="display:none;" class="no-data-banner">
-      No data found · Check back after routes are completed
     </div>
   </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="daily" onclick="switchTab('daily')">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Daily
+    </button>
+    <button class="tab-btn" data-tab="weekly" onclick="switchTab('weekly')">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Weekly
+    </button>
+  </div>
+
+  <div class="tab-pane active" id="tab-daily"><div class="wrapper"><div class="reveal" id="dailyContent"></div></div></div>
+  <div class="tab-pane" id="tab-weekly"><div class="wrapper"><div class="reveal" id="weeklyContent"></div></div></div>
+
+  <footer class="footer">
+    <div class="footer-logo">Driver <span>Scorecard</span></div>
+    <p>DSP performance scorecard</p>
+    <p class="footer-internal">INTERNAL USE ONLY</p>
+  </footer>
 </div>
-
-<div class="tab-bar">
-  <button class="tab-btn active" data-tab="daily" onclick="switchTab('daily')">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-    Daily
-  </button>
-  <button class="tab-btn" data-tab="weekly" onclick="switchTab('weekly')">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    Weekly
-  </button>
-  <button class="tab-btn" data-tab="yearly" onclick="switchTab('yearly')">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    2026
-  </button>
-</div>
-
-<div class="tab-pane active" id="tab-daily"><div class="wrapper"><div class="reveal" id="dailyContent"></div></div></div>
-<div class="tab-pane" id="tab-weekly"><div class="wrapper"><div class="reveal" id="weeklyContent"></div></div></div>
-<div class="tab-pane" id="tab-yearly"><div class="wrapper"><div class="reveal" id="yearlyContent"></div></div></div>
-
-<footer class="footer">
-  <div class="footer-logo">On The <span>Level</span> Logistics</div>
-  <p>825 N Clovis Ave &nbsp;&middot;&nbsp; Fresno, CA &nbsp;&middot;&nbsp; DSJ5</p>
-  <p class="footer-internal">ONTH INTERNAL USE ONLY</p>
-</footer>
 
 <script>
 var API_URL = 'https://script.google.com/macros/s/AKfycbxb9ZQAxdZ9JeDi60V4Qwkhdn4gj3DTKzbabDfSH-0wUUcEKSIR3m_liDjErk4qf-X59Q/exec';
 var _cachedData = null;
+var _allDrivers = [];
+var _listLoaded = false;
+var _listCallbacks = [];
 
-// Shorthand — all escaping goes through the core
-function esc(v) {
-  return String(v == null ? '' : v).replace(/[&<>'"]/g, function(c) {
-    return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];
+function esc(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function syncThemeColor() {
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#06110d');
+}
+
+function scrollReveal(selector) {
+  var els = Array.prototype.slice.call(document.querySelectorAll(selector));
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('visible'); });
+    return;
+  }
+
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold:.08 });
+
+  els.forEach(function(el){ obs.observe(el); });
+}
+
+var ICONS = {
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  dsb:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  cdf:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  alert:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+};
+
+var FOCUS_ICONS = {
+  sph:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.clock+'</svg>',
+  dcr:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+  pod:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.shield+'</svg>',
+  dsb:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.dsb+'</svg>',
+  cdf:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.cdf+'</svg>',
+  trophy:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a2 2 0 0 0-2 2v2a4 4 0 0 0 4 4h.1M17 4h3a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h-.1M7 4h10v6a5 5 0 0 1-10 0V4z"/></svg>'
+};
+
+document.addEventListener('DOMContentLoaded', init);
+
+function init() {
+  syncThemeColor();
+
+  var params = new URLSearchParams(window.location.search);
+  var driver = (params.get('driver') || '').trim();
+
+  if (!driver) showSearchPage();
+  else showScorecardPage(driver);
+}
+
+function showSearchPage() {
+  document.getElementById('searchPage').classList.add('active');
+  document.title = 'DSP Driver Scorecard';
+  loadDriverList();
+  setupSearch();
+}
+
+function showScorecardPage(driver) {
+  document.getElementById('scorecardPage').classList.add('active');
+  document.title = driver + ' - DSP Scorecard';
+  document.getElementById('heroName').textContent = driver;
+  loadData(driver);
+  reObserve();
+}
+
+function loadDriverList() {
+  try {
+    var cached = sessionStorage.getItem('dsp_driver_list');
+    if (cached) {
+      _allDrivers = JSON.parse(cached);
+      _listLoaded = true;
+      return;
+    }
+  } catch(e) {}
+
+  fetch(API_URL + '?mode=list')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.drivers && d.drivers.length) {
+        _allDrivers = d.drivers;
+        try { sessionStorage.setItem('dsp_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
+      }
+      finishDriverList();
+    })
+    .catch(finishDriverList);
+}
+
+function finishDriverList() {
+  _listLoaded = true;
+  _listCallbacks.forEach(function(fn){ fn(); });
+  _listCallbacks = [];
+}
+
+function whenListReady(fn) {
+  if (_listLoaded) fn();
+  else _listCallbacks.push(fn);
+}
+
+function setupSearch() {
+  var input = document.getElementById('driverSearch');
+  var results = document.getElementById('searchResults');
+  var focused = -1;
+  var debounceTimer = null;
+
+  input.addEventListener('focus', function(){ performSearch(input.value, results); });
+  input.addEventListener('click', function(){ performSearch(input.value, results); });
+  input.addEventListener('input', function(){
+    clearTimeout(debounceTimer);
+    var q = input.value.trim();
+    focused = -1;
+    debounceTimer = setTimeout(function(){ performSearch(q, results); }, 180);
   });
+
+  input.addEventListener('keydown', function(e){
+    var items = results.querySelectorAll('.search-result-item');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focused = Math.min(focused + 1, items.length - 1);
+      updateFocus(items, focused);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focused = Math.max(focused - 1, 0);
+      updateFocus(items, focused);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      var active = results.querySelector('.search-result-item.focused');
+      if (active) active.click();
+      else if (items.length === 1) items[0].click();
+    } else if (e.key === 'Escape') {
+      results.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('.search-box')) results.style.display = 'none';
+  });
+
+  if (window.innerWidth >= 640) input.focus();
+}
+
+function updateFocus(items, idx) {
+  items.forEach(function(el, i){ el.classList.toggle('focused', i === idx); });
+  if (items[idx]) items[idx].scrollIntoView({ block:'nearest' });
+}
+
+function performSearch(q, results) {
+  var qNorm = normalizeSearch(q);
+
+  if (!_listLoaded) {
+    results.style.display = 'block';
+    results.innerHTML = '<div class="search-loading">Loading drivers...</div>';
+    whenListReady(function(){ performSearch(q, results); });
+    return;
+  }
+
+  var matches = _allDrivers.filter(function(name){
+    if (!qNorm) return true;
+    return normalizeSearch(name).indexOf(qNorm) !== -1;
+  });
+
+  renderResults(matches, q, results);
+}
+
+function normalizeSearch(value) {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+}
+
+function renderResults(matches, q, results) {
+  if (!matches.length) {
+    results.style.display = 'block';
+    results.innerHTML = '<div class="search-empty">No drivers found &middot; Check spelling</div>';
+    return;
+  }
+
+  results.style.display = 'block';
+  results.innerHTML = matches.map(function(name){
+    var highlighted = esc(name);
+    if (q.trim()) {
+      highlighted = highlighted.replace(
+        new RegExp('(' + q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'),
+        '<span style="color:var(--accent);font-weight:600;">$1</span>'
+      );
+    }
+
+    return '<div class="search-result-item" onclick="selectDriver(this)" data-name="' + esc(name) + '">' +
+      '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+      highlighted +
+    '</div>';
+  }).join('');
+}
+
+function selectDriver(el) {
+  window.location.href = window.location.pathname + '?driver=' + encodeURIComponent(el.getAttribute('data-name'));
 }
 
 function switchTab(tab) {
@@ -300,26 +496,32 @@ function switchTab(tab) {
   reObserve();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#07110c');
+function loadData(driver) {
+  fetch(API_URL + '?driver=' + encodeURIComponent(driver))
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(d){
+      _cachedData = d;
 
-  var params = new URLSearchParams(window.location.search);
-  var driver = (params.get('driver') || '').trim();
-  document.title = driver ? driver + ' · ONTH Scorecard' : 'ONTH Daily Scorecard';
+      var daily = d.daily || d;
+      var weekly = d.weekly || null;
+      var resolvedName = daily.driver || driver;
 
-  if (!driver) {
-    document.getElementById('heroName').textContent = 'No Driver';
-    document.getElementById('noDataBanner').style.display = 'block';
-    setAllEmpty('No driver specified — use ?driver=First+Last');
-    renderWeeklyNoData('No driver specified');
-    renderYearlyNoData('No driver specified');
-    return;
-  }
-  document.getElementById('heroName').textContent = driver;
-  loadData(driver);
-  document.getElementById('gamePlanBtn').href = 'https://onth-bot.github.io/gameplan/?driver=' + encodeURIComponent(driver);
-  reObserve();
-});
+      if (_allDrivers.indexOf(resolvedName) === -1) {
+        _allDrivers.push(resolvedName);
+        try { sessionStorage.setItem('dsp_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
+      }
+
+      document.getElementById('heroDt').textContent = daily.date ? formatDisplayDate(daily.date) : 'NO RECENT SHIFT';
+      renderDaily(daily);
+      renderWeekly(weekly);
+    })
+    .catch(function(e){
+      document.getElementById('heroDt').textContent = 'ERROR';
+      document.getElementById('noDataBanner').style.display = 'block';
+      setAllEmpty('Failed to load: ' + e.message);
+      renderWeeklyNoData('Failed to load data');
+    });
+}
 
 function formatDisplayDate(dateString) {
   if (!dateString) return '';
@@ -328,29 +530,109 @@ function formatDisplayDate(dateString) {
   return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' }).toUpperCase();
 }
 
-function loadData(driver) {
-  fetch(API_URL + '?driver=' + encodeURIComponent(driver))
-    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(d){
-      _cachedData = d;
-      var daily  = d.daily  || d;
-      var weekly = d.weekly || null;
-      var yearly = d.yearly || null;
-      document.getElementById('heroDt').textContent = daily.date ? formatDisplayDate(daily.date) : 'NO RECENT SHIFT';
-      renderDaily(daily);
-      renderWeekly(weekly);
-      renderYearly(yearly);
-    })
-    .catch(function(e){
-      document.getElementById('heroDt').textContent = 'ERROR';
-      document.getElementById('noDataBanner').style.display = 'block';
-      setAllEmpty('Failed to load: ' + e.message);
-      renderWeeklyNoData('Failed to load data');
-      renderYearlyNoData('Failed to load data');
-    });
+function pctValue(v) {
+  var n = parseFloat(v);
+  if (isNaN(n)) return NaN;
+  return n <= 1 ? n * 100 : n;
 }
 
-// ── DAILY ────────────────────────────────────────────────────
+function sectionHeader(title, iconPath, fullWidth) {
+  return '<div class="section-header">' +
+    '<div class="section-icon"><svg viewBox="0 0 24 24">' + iconPath + '</svg></div>' +
+    '<div class="section-title-wrap"><div class="section-title">' + esc(title) + '</div></div>' +
+    (fullWidth ? '<div class="section-line"></div>' : '') +
+  '</div>';
+}
+
+function buildScoreHero(opts) {
+  var score = opts.score != null ? parseFloat(opts.score) : null;
+  var ringId = opts.ringId || '';
+  var label = opts.ringLabel || 'Avg';
+  var rankHtml = opts.rank != null && opts.total != null
+    ? '<div class="hero-rank-line">Ranked <span>' + opts.rank + '</span> out of <span>' + opts.total + '</span> drivers</div>'
+    : '';
+
+  var html = '<div class="weekly-hero">';
+  if (score != null && !isNaN(score)) {
+    html += '<div class="weekly-ring-wrap"><svg viewBox="0 0 80 80"><circle class="weekly-ring-track" cx="40" cy="40" r="35"/><circle class="weekly-ring-fill" id="' + ringId + '" cx="40" cy="40" r="35"/></svg><div class="weekly-ring-center"><div class="weekly-ring-score">' + score.toFixed(2) + '</div><div class="weekly-ring-label">' + esc(label) + '</div></div></div>';
+  }
+
+  html += '<div class="weekly-hero-meta">' +
+    '<div class="weekly-hero-week">' + esc(opts.kicker) + '</div>' +
+    '<div class="weekly-hero-title">' + esc(opts.title) + '</div>' +
+    '<div class="weekly-hero-sub">' + esc(opts.sub) + '</div>' +
+    rankHtml +
+  '</div></div>';
+
+  if (score != null && !isNaN(score) && ringId) {
+    setTimeout(function(){
+      var rf = document.getElementById(ringId);
+      if (rf) rf.style.strokeDashoffset = 220 - (Math.min(Math.max(score / 100, 0), 1) * 220);
+    }, 300);
+  }
+
+  return html;
+}
+
+function buildListHtml(items, zeroFilter, successTitle, successMsg) {
+  var filtered = items;
+
+  if (zeroFilter) {
+    filtered = items.filter(function(item){
+      if (item.val == null || item.val === '') return false;
+      var n = parseFloat(item.val);
+      return !isNaN(n) && n > 0;
+    });
+
+    if (!filtered.length) {
+      return '<div class="metric-list"><div class="metric-row" style="gap:14px;">' +
+        '<div style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--success-bg);border:1px solid var(--success-bd);border-radius:4px;color:var(--success);flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS.check + '</svg></div>' +
+        '<div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;letter-spacing:.05em;color:var(--success);">' + esc(successTitle || 'No Issues Recorded') + '</div>' +
+        '<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:rgba(var(--success-rgb),.6);letter-spacing:.08em;margin-top:2px;">' + esc(successMsg || 'Great job - keep it up!') + '</div></div>' +
+      '</div></div>';
+    }
+  }
+
+  return '<div class="metric-list">' + filtered.map(function(item){
+    var val = item.val;
+    var display = '-';
+    var cls = 'neutral';
+
+    if (val != null && val !== '') {
+      var n = parseFloat(val);
+      if (!isNaN(n)) {
+        if (item.fmt === 'pct') {
+          var pv = pctValue(n);
+          display = pv.toFixed(2) + '%';
+          if (!item.neutral) cls = pv >= item.thresholds[0] ? 'green' : pv >= item.thresholds[1] ? 'amber' : 'red';
+        } else if (item.fmt === 'dec') {
+          display = n.toFixed(2);
+          if (!item.neutral) {
+            if (item.zero) cls = n === 0 ? 'green' : n <= .5 ? 'amber' : 'red';
+            else cls = n >= item.thresholds[0] ? 'green' : n >= item.thresholds[1] ? 'amber' : 'red';
+          }
+        } else {
+          display = String(Math.round(n));
+        }
+      }
+    }
+
+    return '<div class="metric-row"><div class="metric-name">' + esc(item.name) + (item.sub ? '<span class="sub">' + esc(item.sub) + '</span>' : '') + '</div><div class="metric-chip ' + cls + '">' + display + '</div></div>';
+  }).join('') + '</div>';
+}
+
+function buildSphAlert(value) {
+  if (value == null) return '';
+  var s = parseFloat(value);
+  if (isNaN(s)) return '';
+
+  if (s < 20) {
+    return '<div class="metric-alert"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS.alert + '</svg> Below minimum of 20 SPH by ' + ((20 - s) / 20 * 100).toFixed(1) + '%</div>';
+  }
+
+  return '<div class="metric-alert good"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS.check + '</svg> Meeting SPH minimum</div>';
+}
+
 function renderDaily(d) {
   if (!d.dcr && !d.pod && !d.sph) document.getElementById('noDataBanner').style.display = 'block';
 
@@ -358,163 +640,135 @@ function renderDaily(d) {
     document.getElementById('heroScoreRow').style.display = 'grid';
     var score = parseFloat(d.overall);
     document.getElementById('ringScore').textContent = score.toFixed(2);
-    var pct = Math.min(Math.max(score / 100, 0), 1);
-    setTimeout(function(){ document.getElementById('ringFill').style.strokeDashoffset = 264 - (pct * 264); }, 200);
+
+    setTimeout(function(){
+      document.getElementById('ringFill').style.strokeDashoffset = 264 - (Math.min(Math.max(score / 100, 0), 1) * 264);
+    }, 200);
+
     if (d.rank && d.total) {
       document.getElementById('rankPill').style.display = 'flex';
       document.getElementById('rankNum').textContent = d.rank + ' / ' + d.total;
-      document.getElementById('topPct').innerHTML = 'Top <span>' + Math.round((parseInt(d.rank)/parseInt(d.total))*100) + '%</span> of drivers';
+      document.getElementById('topPct').innerHTML = 'Top <span>' + Math.round((parseInt(d.rank, 10) / parseInt(d.total, 10)) * 100) + '%</span> of drivers';
     }
   }
 
-  var html = '';
   var displayDate = d.date ? formatDisplayDate(d.date) : 'NO RECENT SHIFT FOUND';
-  html += '<div class="date-card"><div class="date-card-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="date-card-label">Shift Data Displayed</div><div class="date-card-value">' + displayDate + '</div></div></div>';
+  var html = '<div class="date-card"><div class="date-card-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS.calendar + '</svg></div><div><div class="date-card-label">Shift Data Displayed</div><div class="date-card-value">' + esc(displayDate) + '</div></div></div>';
 
   html += '<div class="metric-2col">';
-  html += '<div>' + sectionHeader('Delivery Quality', '<polyline points="20 6 9 17 4 12"/>') +
-    buildListHtml([
-      { name:'POD', sub:'Photo on Delivery', val:d.pod, fmt:'pct', thresholds:[99.5,95] },
-      { name:'DCR', sub:'Delivery Completion Rate', val:d.dcr, fmt:'pct', thresholds:[99.5,95] },
-    ], false) + '</div>';
+  html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
+    { name:'POD', sub:'Photo on Delivery', val:d.pod, fmt:'pct', thresholds:[99.5,95] },
+    { name:'DCR', sub:'Delivery Completion Rate', val:d.dcr, fmt:'pct', thresholds:[99.5,95] }
+  ], false) + '</div>';
 
-  var sphAlert = '';
-  if (d.sph != null) {
-    var s = parseFloat(d.sph);
-    sphAlert = s < 20
-      ? '<div class="metric-alert"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Below minimum of 20 SPH by ' + ((20-s)/20*100).toFixed(1) + '%</div>'
-      : '<div class="metric-alert good"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Meeting SPH minimum</div>';
-  }
-  html += '<div>' + sectionHeader('Delivery Speed', '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>') +
-    buildListHtml([
-      { name:'Stops Per Hour', sub:'SPH', val:d.sph, fmt:'dec', thresholds:[20,18], dir:'high' },
-      { name:'Total Stops', sub:'Completed', val:d.stops, fmt:'num', neutral:true },
-      { name:'Total Packages', sub:'Delivered', val:d.pkgs, fmt:'num', neutral:true },
-    ], false) + sphAlert + '</div>';
+  html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
+    { name:'Stops Per Hour', sub:'SPH', val:d.sph, fmt:'dec', thresholds:[20,18], dir:'high' },
+    { name:'Total Stops', sub:'Completed', val:d.stops, fmt:'num', neutral:true },
+    { name:'Total Packages', sub:'Delivered', val:d.pkgs, fmt:'num', neutral:true }
+  ], false) + buildSphAlert(d.sph) + '</div>';
   html += '</div>';
 
-  html += sectionHeader('Driving Safety', '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', true);
-  html += buildListHtml([
+  html += sectionHeader('Driving Safety', ICONS.shield, true) + buildListHtml([
     { name:'Seatbelt-Off Rate', val:d.seatbelt, fmt:'dec', zero:true },
     { name:'Speeding Event Rate', val:d.speeding, fmt:'dec', zero:true },
     { name:'Distractions Rate', val:d.distractions, fmt:'dec', zero:true },
     { name:'Following Distance Rate', val:d.following, fmt:'dec', zero:true },
-    { name:'Sign / Signal Violations Rate', val:d.signViolations, fmt:'dec', zero:true },
+    { name:'Sign / Signal Violations Rate', val:d.signViolations, fmt:'dec', zero:true }
   ], true, 'No Issues Recorded', 'Thank you for driving safely.');
 
   html += '<div class="metric-2col">';
-  html += '<div>' + sectionHeader('DSB', '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>') +
-    buildListHtml([
-      { name:'Simultaneous Deliveries', val:d.simultaneous, fmt:'dec', zero:true },
-      { name:'Delivered > 50m', val:d.delivered50m, fmt:'dec', zero:true },
-      { name:'Incorrect Scan (Attended)', val:d.incorrectAttended, fmt:'dec', zero:true },
-      { name:'Incorrect Scan (Unattended)', val:d.incorrectUnattended, fmt:'dec', zero:true },
-      { name:'No POD on Delivery', val:d.noPod, fmt:'dec', zero:true },
-      { name:'Scanned Not Delivered', val:d.scannedNotDelivered, fmt:'dec', zero:true },
-    ], true, 'No Issues Recorded', 'Thank you for doing everything to cover yourself and verifying every stop. Keep it up!') + '</div>';
-  html += '<div>' + sectionHeader('CDF', '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>') +
-    buildListHtml([
-      { name:'Mishandled Package', val:d.mishandled, fmt:'dec', zero:true },
-      { name:'Unprofessional', val:d.unprofessional, fmt:'dec', zero:true },
-      { name:'Did Not Follow Instructions', val:d.noFollowInstructions, fmt:'dec', zero:true },
-      { name:'Wrong Address', val:d.wrongAddress, fmt:'dec', zero:true },
-      { name:'Never Received Delivery', val:d.neverReceived, fmt:'dec', zero:true },
-      { name:'Received Wrong Item', val:d.wrongItem, fmt:'dec', zero:true },
-    ], true, 'No Issues Recorded', 'Thank you for ensuring the customer has a great experience.') + '</div>';
+  html += '<div>' + sectionHeader('DSB', ICONS.dsb) + buildListHtml([
+    { name:'Simultaneous Deliveries', val:d.simultaneous, fmt:'dec', zero:true },
+    { name:'Delivered > 50m', val:d.delivered50m, fmt:'dec', zero:true },
+    { name:'Incorrect Scan (Attended)', val:d.incorrectAttended, fmt:'dec', zero:true },
+    { name:'Incorrect Scan (Unattended)', val:d.incorrectUnattended, fmt:'dec', zero:true },
+    { name:'No POD on Delivery', val:d.noPod, fmt:'dec', zero:true },
+    { name:'Scanned Not Delivered', val:d.scannedNotDelivered, fmt:'dec', zero:true }
+  ], true, 'No Issues Recorded', 'Thank you for verifying every stop. Keep it up!') + '</div>';
+
+  html += '<div>' + sectionHeader('CDF', ICONS.cdf) + buildListHtml([
+    { name:'Mishandled Package', val:d.mishandled, fmt:'dec', zero:true },
+    { name:'Unprofessional', val:d.unprofessional, fmt:'dec', zero:true },
+    { name:'Did Not Follow Instructions', val:d.noFollowInstructions, fmt:'dec', zero:true },
+    { name:'Wrong Address', val:d.wrongAddress, fmt:'dec', zero:true },
+    { name:'Never Received Delivery', val:d.neverReceived, fmt:'dec', zero:true },
+    { name:'Received Wrong Item', val:d.wrongItem, fmt:'dec', zero:true }
+  ], true, 'No Issues Recorded', 'Thank you for ensuring the customer has a great experience.') +
+  (d.feedbackDetails && d.feedbackDetails.trim() ? '<div class="feedback-box"><div class="feedback-box-label">Customer Feedback Notes</div>' + esc(d.feedbackDetails) + '</div>' : '') +
+  '</div>';
   html += '</div>';
 
-  html += '<div class="focus-area" id="dailyFocusArea" style="display:none;">' +
-    sectionHeader('Focus Area & Guidance', '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', true) +
-    '<div id="dailyFocusCards"></div></div>';
+  html += '<div class="focus-area" id="dailyFocusArea" style="display:none;">' + sectionHeader('Focus Area & Guidance', ICONS.alert, true) + '<div id="dailyFocusCards"></div></div>';
 
   document.getElementById('dailyContent').innerHTML = html;
   renderFocus(d, 'dailyFocusArea', 'dailyFocusCards');
   reObserve();
 }
 
-// ── WEEKLY ───────────────────────────────────────────────────
 function renderWeekly(w) {
-  if (!w || !w.week) { renderWeeklyNoData('No weekly data available yet'); return; }
-
-  var overallScore = w.overall ? parseFloat(w.overall) : null;
-  var ringOffset   = overallScore != null ? 220 - (Math.min(Math.max(overallScore/100,0),1) * 220) : 220;
-  var html = '';
-
-  html += '<div class="section-header" style="margin-top:24px;"><div class="section-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="section-title-wrap"><div class="section-title">Week ' + esc(w.week) + '</div></div><div class="section-line"></div></div>';
-
-  html += '<div class="weekly-hero">';
-  if (overallScore != null) {
-    html += '<div class="weekly-ring-wrap"><svg viewBox="0 0 80 80"><circle class="weekly-ring-track" cx="40" cy="40" r="35"/><circle class="weekly-ring-fill" id="weeklyRingFill" cx="40" cy="40" r="35"/></svg><div class="weekly-ring-center"><div class="weekly-ring-score">' + overallScore.toFixed(2) + '</div><div class="weekly-ring-label">Overall</div></div></div>';
+  if (!w || !w.week) {
+    renderWeeklyNoData('No weekly data available yet');
+    return;
   }
-  html += '<div class="weekly-hero-meta"><div class="weekly-hero-week">Weekly Summary</div><div class="weekly-hero-title">Performance Overview</div><div class="weekly-hero-sub">Week ' + esc(w.week) + ' · DSJ5 · Fresno, CA</div>' +
-    (w.rank != null && w.total != null ? '<div style="margin-top:8px;font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-muted);">RANKED <span style="color:var(--accent);font-size:13px;">' + w.rank + '</span> OUT OF <span style="color:var(--accent);font-size:13px;">' + w.total + '</span> DRIVERS</div>' : '') +
-    '</div></div>';
 
-  setTimeout(function(){ var rf=document.getElementById('weeklyRingFill'); if(rf) rf.style.strokeDashoffset=ringOffset; }, 300);
+  var html = sectionHeader('Week ' + w.week, ICONS.calendar, true);
+  html += buildScoreHero({
+    score:w.overall,
+    ringId:'weeklyRingFill',
+    ringLabel:'Overall',
+    kicker:'Weekly Summary',
+    title:'Performance Overview',
+    sub:'Week ' + w.week,
+    rank:w.rank,
+    total:w.total
+  });
 
   html += '<div class="metric-2col">';
-  html += '<div>' + sectionHeader('Delivery Quality', '<polyline points="20 6 9 17 4 12"/>') +
-    buildListHtml([
-      { name:'POD', sub:'Photo on Delivery', val:w.pod, fmt:'pct', thresholds:[99.5,95] },
-      { name:'DCR', sub:'Delivery Completion Rate', val:w.dcr, fmt:'pct', thresholds:[99.5,95] },
-    ], false) + '</div>';
+  html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
+    { name:'POD', sub:'Photo on Delivery', val:w.pod, fmt:'pct', thresholds:[99.5,95] },
+    { name:'DCR', sub:'Delivery Completion Rate', val:w.dcr, fmt:'pct', thresholds:[99.5,95] }
+  ], false) + '</div>';
 
-  var wsphAlert = '';
-  if (w.weeklySph != null) {
-    var ws = parseFloat(w.weeklySph);
-    wsphAlert = ws < 20
-      ? '<div class="metric-alert"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Below minimum of 20 SPH by ' + ((20-ws)/20*100).toFixed(1) + '%</div>'
-      : '<div class="metric-alert good"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Meeting SPH minimum</div>';
-  }
-  html += '<div>' + sectionHeader('Delivery Speed', '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>') +
-    buildListHtml([
-      { name:'Avg Stops Per Hour', sub:'Weekly SPH', val:w.weeklySph, fmt:'dec', thresholds:[20,18], dir:'high' },
-      { name:'Total Stops', sub:'Weekly Sum', val:w.weeklyStops, fmt:'num', neutral:true },
-      { name:'Total Packages', sub:'Weekly Sum', val:w.weeklyPkgs, fmt:'num', neutral:true },
-    ], false) + wsphAlert + '</div>';
+  html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
+    { name:'Avg Stops Per Hour', sub:'Weekly SPH', val:w.weeklySph, fmt:'dec', thresholds:[20,18], dir:'high' },
+    { name:'Total Stops', sub:'Weekly Sum', val:w.weeklyStops, fmt:'num', neutral:true },
+    { name:'Total Packages', sub:'Weekly Sum', val:w.weeklyPkgs, fmt:'num', neutral:true }
+  ], false) + buildSphAlert(w.weeklySph) + '</div>';
   html += '</div>';
 
-  html += sectionHeader('Driving Safety', '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', true);
-  html += buildListHtml([
+  html += sectionHeader('Driving Safety', ICONS.shield, true) + buildListHtml([
     { name:'Seatbelt-Off Rate', val:w.seatbelt, fmt:'dec', zero:true },
     { name:'Speeding Event Rate', val:w.speeding, fmt:'dec', zero:true },
     { name:'Distractions Rate', val:w.distractions, fmt:'dec', zero:true },
     { name:'Following Distance Rate', val:w.following, fmt:'dec', zero:true },
-    { name:'Sign / Signal Violations', val:w.signViolations, fmt:'dec', zero:true },
-  ], true, 'No Safety Issues', 'Clean week — well done.');
+    { name:'Sign / Signal Violations', val:w.signViolations, fmt:'dec', zero:true }
+  ], true, 'No Safety Issues', 'Clean week - well done.');
 
   html += '<div class="metric-2col" style="margin-top:8px;">';
-  html += '<div>' + sectionHeader('DSB Detail', '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>') +
-    buildListHtml([{ name:'DSB DPMO', sub:'Delivery Success Behaviors', val:w.dsb, fmt:'dec', neutral:true }], false) +
-    '<div style="height:8px;"></div>' +
-    buildListHtml([
-      { name:'Simultaneous Deliveries', val:w.simultaneous, fmt:'dec', zero:true },
-      { name:'Delivered > 50m', val:w.delivered50m, fmt:'dec', zero:true },
-      { name:'Incorrect Scan (Attended)', val:w.incorrectAttended, fmt:'dec', zero:true },
-      { name:'Incorrect Scan (Unattended)', val:w.incorrectUnattended, fmt:'dec', zero:true },
-      { name:'No POD on Delivery', val:w.noPod, fmt:'dec', zero:true },
-      { name:'Scanned Not Delivered', val:w.scannedNotDelivered, fmt:'dec', zero:true },
-    ], true, 'No DSB Issues', 'Great delivery accuracy this week.') + '</div>';
-  html += '<div>' + sectionHeader('CDF Detail', '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>') +
-    buildListHtml([{ name:'CDF DPMO', sub:'Defects Per Million', val:w.cdfDpmo, fmt:'num', neutral:true }], false) +
-    '<div style="height:8px;"></div>' +
-    buildListHtml([
-      { name:'Mishandled Package', val:w.mishandled, fmt:'dec', zero:true },
-      { name:'Unprofessional', val:w.unprofessional, fmt:'dec', zero:true },
-      { name:'Did Not Follow Instructions', val:w.noFollowInstructions, fmt:'dec', zero:true },
-      { name:'Wrong Address', val:w.wrongAddress, fmt:'dec', zero:true },
-      { name:'Never Received Delivery', val:w.neverReceived, fmt:'dec', zero:true },
-      { name:'Received Wrong Item', val:w.wrongItem, fmt:'dec', zero:true },
-    ], true, 'No CDF Issues', 'Excellent customer experience this week.') + '</div>';
+  html += '<div>' + sectionHeader('DSB Detail', ICONS.dsb) + buildListHtml([{ name:'DSB DPMO', sub:'Delivery Success Behaviors', val:w.dsb, fmt:'dec', neutral:true }], false) + '<div style="height:8px;"></div>' + buildListHtml([
+    { name:'Simultaneous Deliveries', val:w.simultaneous, fmt:'dec', zero:true },
+    { name:'Delivered > 50m', val:w.delivered50m, fmt:'dec', zero:true },
+    { name:'Incorrect Scan (Attended)', val:w.incorrectAttended, fmt:'dec', zero:true },
+    { name:'Incorrect Scan (Unattended)', val:w.incorrectUnattended, fmt:'dec', zero:true },
+    { name:'No POD on Delivery', val:w.noPod, fmt:'dec', zero:true },
+    { name:'Scanned Not Delivered', val:w.scannedNotDelivered, fmt:'dec', zero:true }
+  ], true, 'No DSB Issues', 'Great delivery accuracy this week.') + '</div>';
+
+  html += '<div>' + sectionHeader('CDF Detail', ICONS.cdf) + buildListHtml([{ name:'CDF DPMO', sub:'Defects Per Million', val:w.cdfDpmo, fmt:'num', neutral:true }], false) + '<div style="height:8px;"></div>' + buildListHtml([
+    { name:'Mishandled Package', val:w.mishandled, fmt:'dec', zero:true },
+    { name:'Unprofessional', val:w.unprofessional, fmt:'dec', zero:true },
+    { name:'Did Not Follow Instructions', val:w.noFollowInstructions, fmt:'dec', zero:true },
+    { name:'Wrong Address', val:w.wrongAddress, fmt:'dec', zero:true },
+    { name:'Never Received Delivery', val:w.neverReceived, fmt:'dec', zero:true },
+    { name:'Received Wrong Item', val:w.wrongItem, fmt:'dec', zero:true }
+  ], true, 'No CDF Issues', 'Excellent customer experience this week.') + '</div>';
   html += '</div>';
 
   if (w.feedbackDetails && w.feedbackDetails.trim()) {
     html += '<div class="feedback-box"><div class="feedback-box-label">Customer Feedback Notes</div>' + esc(w.feedbackDetails) + '</div>';
   }
 
-  html += '<div class="reveal focus-area" id="weeklyFocusArea" style="display:none;margin-top:32px;">' +
-    '<div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="section-title-wrap"><div class="section-title">Focus Area & Guidance</div></div><div class="section-line"></div></div>' +
-    '<div id="weeklyFocusCards"></div></div>';
+  html += '<div class="reveal focus-area" id="weeklyFocusArea" style="display:none;margin-top:32px;">' + sectionHeader('Focus Area & Guidance', ICONS.alert, true) + '<div id="weeklyFocusCards"></div></div>';
 
   document.getElementById('weeklyContent').innerHTML = html;
   renderFocus(w, 'weeklyFocusArea', 'weeklyFocusCards');
@@ -522,249 +776,79 @@ function renderWeekly(w) {
 }
 
 function renderWeeklyNoData(msg) {
-  document.getElementById('weeklyContent').innerHTML =
-    '<div class="weekly-no-data" style="margin-top:32px;"><div class="weekly-no-data-icon"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="weekly-no-data-title">No Weekly Data</div><div class="weekly-no-data-sub">' + esc(msg) + '</div></div>';
+  document.getElementById('weeklyContent').innerHTML = noDataBlock('No Weekly Data', msg, ICONS.calendar);
 }
 
-// ── YEARLY ───────────────────────────────────────────────────
-function renderYearly(y) {
-  if (!y || y.overall == null) { renderYearlyNoData('No yearly data available yet'); return; }
-
-  var overallScore = parseFloat(y.overall);
-  var ringOffset   = 220 - (Math.min(Math.max(overallScore/100,0),1) * 220);
-  var html = '';
-
-  html += '<div class="section-header" style="margin-top:24px;"><div class="section-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="section-title-wrap"><div class="section-title">2026 Season</div></div><div class="section-line"></div></div>';
-
-  html += '<div class="weekly-hero"><div class="weekly-ring-wrap"><svg viewBox="0 0 80 80"><circle class="weekly-ring-track" cx="40" cy="40" r="35"/><circle class="weekly-ring-fill" id="yearlyRingFill" cx="40" cy="40" r="35"/></svg><div class="weekly-ring-center"><div class="weekly-ring-score">' + overallScore.toFixed(2) + '</div><div class="weekly-ring-label">Avg</div></div></div>' +
-    '<div class="weekly-hero-meta"><div class="weekly-hero-week">2026 Average Score</div><div class="weekly-hero-title">Season Overview</div><div class="weekly-hero-sub">All Weeks · DSJ5 · Fresno, CA</div>' +
-    (y.rank != null && y.total != null ? '<div style="margin-top:8px;font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-muted);">RANKED <span style="color:var(--accent);font-size:13px;">' + y.rank + '</span> OUT OF <span style="color:var(--accent);font-size:13px;">' + y.total + '</span> DRIVERS</div>' : '') +
-    '</div></div>';
-
-  setTimeout(function(){ var rf=document.getElementById('yearlyRingFill'); if(rf) rf.style.strokeDashoffset=ringOffset; }, 300);
-
-  var mr = y.metricRanks || {};
-  var metricTotal = null;
-  var metricCardDefs = [
-    { key:'dcr',     label:'DCR',      val:y.dcr,       fmt:'pct' },
-    { key:'pod',     label:'POD',      val:y.pod,       fmt:'pct' },
-    { key:'sph',     label:'SPH',      val:y.yearlySph, fmt:'dec' },
-    { key:'cdfDpmo', label:'CDF DPMO', val:y.cdfDpmo,   fmt:'dec' },
-    { key:'dsb',     label:'DSB DPMO', val:y.dsb,       fmt:'dec' }
-  ];
-  metricCardDefs.forEach(function(mc){ if(!metricTotal && mr[mc.key]) metricTotal=mr[mc.key].total; });
-
-  html += '<div style="display:flex;align-items:center;gap:12px;margin:20px 0 12px;">' +
-    '<div style="width:32px;height:32px;flex-shrink:0;background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg></div>' +
-    '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:clamp(22px,5vw,34px);line-height:1;letter-spacing:0.03em;color:var(--text);">2026 Season Rank by Metric</div>' +
-    (metricTotal ? '<div style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:0.15em;color:var(--text-muted);white-space:nowrap;">· ' + metricTotal + ' DRIVERS</div>' : '') +
-    '<div style="flex:1;height:1px;background:var(--border-main);"></div></div>';
-
-  html += '<div class="metric-rank-grid">';
-  metricCardDefs.forEach(function(mc) {
-    var ri=mr[mc.key], rank=ri?ri.rank:null, total=ri?ri.total:null;
-    var pct=(rank!=null&&total!=null)?rank/total:null;
-    var bc=pct!=null?(pct<=0.33?'var(--success)':pct<=0.66?'var(--warning)':'var(--danger)'):'var(--border-main)';
-    var n=mc.val!=null?parseFloat(mc.val):NaN;
-    var vd=isNaN(n)?'—':(mc.fmt==='pct'?((n>1?n:n*100).toFixed(2)+'%'):n.toFixed(2));
-    html += '<div style="background:var(--card-surface);border:1px solid '+bc+';border-left:3px solid '+bc+';border-radius:6px;padding:14px 16px;">' +
-      '<div style="font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text);font-weight:600;margin-bottom:8px;">' + mc.label + '</div>' +
-      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:'+bc+';line-height:1;letter-spacing:0.02em;">' + (rank!=null?'#'+rank:'—') + '</div>' +
-      '<div style="height:10px;"></div>' +
-      '<div style="font-family:\'DM Mono\',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Avg</div>' +
-      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:var(--text);letter-spacing:0.04em;line-height:1;">' + vd + '</div>' +
-      '</div>';
-  });
-  html += '</div>';
-
-  html += '<div class="metric-2col">';
-  html += '<div>' + sectionHeader('Delivery Quality', '<polyline points="20 6 9 17 4 12"/>') +
-    buildListHtml([
-      { name:'POD Avg', sub:'Photo on Delivery', val:y.pod, fmt:'pct', thresholds:[99.5,95] },
-      { name:'DCR Avg', sub:'Delivery Completion Rate', val:y.dcr, fmt:'pct', thresholds:[99.5,95] },
-    ], false) + '</div>';
-
-  var ysphAlert = '';
-  if (y.yearlySph != null) {
-    var ys = parseFloat(y.yearlySph);
-    ysphAlert = ys < 20
-      ? '<div class="metric-alert"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Below minimum of 20 SPH by ' + ((20-ys)/20*100).toFixed(1) + '%</div>'
-      : '<div class="metric-alert good"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Meeting SPH minimum</div>';
-  }
-  html += '<div>' + sectionHeader('Delivery Speed', '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>') +
-    buildListHtml([
-      { name:'Avg Stops Per Hour', sub:'2026 SPH Avg', val:y.yearlySph, fmt:'dec', thresholds:[20,18], dir:'high' },
-      { name:'Total Stops', sub:'Season Sum', val:y.yearlyStops, fmt:'num', neutral:true },
-      { name:'Total Packages', sub:'Season Sum', val:y.yearlyPkgs, fmt:'num', neutral:true },
-    ], false) + ysphAlert + '</div>';
-  html += '</div>';
-
-  html += sectionHeader('Driving Safety Averages', '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', true);
-  html += buildListHtml([
-    { name:'Seatbelt-Off Rate Avg', val:y.seatbelt, fmt:'dec', zero:true },
-    { name:'Speeding Event Rate Avg', val:y.speeding, fmt:'dec', zero:true },
-    { name:'Distractions Rate Avg', val:y.distractions, fmt:'dec', zero:true },
-    { name:'Following Distance Rate Avg', val:y.following, fmt:'dec', zero:true },
-    { name:'Sign / Signal Violations Avg', val:y.signViolations, fmt:'dec', zero:true },
-  ], false);
-
-  html += sectionHeader('CDF Detail — Season Totals', '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', true);
-  html += buildListHtml([
-    { name:'CDF DPMO Avg', sub:'Defects Per Million', val:y.cdfDpmo, fmt:'dec', neutral:true },
-    { name:'Mishandled Package', sub:'Season Total', val:y.mishandled, fmt:'num', neutral:true },
-    { name:'Unprofessional', sub:'Season Total', val:y.unprofessional, fmt:'num', neutral:true },
-    { name:'Did Not Follow Instructions', sub:'Season Total', val:y.noFollowInstructions, fmt:'num', neutral:true },
-    { name:'Wrong Address', sub:'Season Total', val:y.wrongAddress, fmt:'num', neutral:true },
-    { name:'Never Received Delivery', sub:'Season Total', val:y.neverReceived, fmt:'num', neutral:true },
-    { name:'Received Wrong Item', sub:'Season Total', val:y.wrongItem, fmt:'num', neutral:true },
-  ], false);
-
-  html += sectionHeader('DSB Detail — Season Totals', '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>', true);
-  html += buildListHtml([
-    { name:'DSB DPMO Avg', sub:'Delivery Success Behaviors', val:y.dsb, fmt:'dec', neutral:true },
-    { name:'Simultaneous Deliveries', sub:'Season Total', val:y.simultaneous, fmt:'num', neutral:true },
-    { name:'Delivered > 50m', sub:'Season Total', val:y.delivered50m, fmt:'num', neutral:true },
-    { name:'Incorrect Scan (Attended)', sub:'Season Total', val:y.incorrectAttended, fmt:'num', neutral:true },
-    { name:'Incorrect Scan (Unattended)', sub:'Season Total', val:y.incorrectUnattended, fmt:'num', neutral:true },
-    { name:'No POD on Delivery', sub:'Season Total', val:y.noPod, fmt:'num', neutral:true },
-    { name:'Scanned Not Delivered', sub:'Season Total', val:y.scannedNotDelivered, fmt:'num', neutral:true },
-  ], false);
-
-  var hist = y.weeklyHistory || [];
-  if (hist.length) {
-    html += '<div class="section-header" style="margin-top:32px;"><div class="section-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="section-title-wrap"><div class="section-title">Week-by-Week Query</div></div><div class="section-line"></div></div>';
-    html += '<div style="overflow-x:auto;border-radius:6px;border:1px solid var(--border-main);"><table style="width:100%;border-collapse:collapse;background:var(--card-surface);font-family:\'DM Mono\',monospace;font-size:10px;"><thead><tr style="border-bottom:1px solid var(--border-main);">' +
-      ['Week','Overall','SPH','POD','DCR','DSB DPMO','CDF DPMO'].map(function(h){ return '<th style="padding:8px 12px;text-align:'+(h==='Week'?'left':'center')+';color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;white-space:nowrap;font-weight:500;">'+h+'</th>'; }).join('') +
-      '</tr></thead><tbody>';
-    hist.forEach(function(row,idx) {
-      var bg=idx%2===0?'background:rgba(255,255,255,0.01);':'';
-      function fmtCell(v,isPct){
-        if(v==null||v==='') return '<td style="padding:7px 12px;text-align:center;color:var(--text-muted);">—</td>';
-        var n=parseFloat(v); if(isNaN(n)) return '<td style="padding:7px 12px;text-align:center;color:var(--text-muted);">—</td>';
-        return '<td style="padding:7px 12px;text-align:center;color:var(--text);">'+(isPct?((n>1?n:n*100).toFixed(2)+'%'):n.toFixed(2))+'</td>';
-      }
-      html += '<tr style="border-bottom:1px solid rgba(30,37,53,0.6);'+bg+'"><td style="padding:7px 12px;color:var(--accent);white-space:nowrap;">'+esc(row.week)+'</td>'+fmtCell(row.overall,false)+fmtCell(row.sph,false)+fmtCell(row.pod,true)+fmtCell(row.dcr,true)+fmtCell(row.dsb,false)+fmtCell(row.cdfDpmo,false)+'</tr>';
-    });
-    html += '</tbody></table></div>';
-  }
-
-  document.getElementById('yearlyContent').innerHTML = html;
-  reObserve();
+function noDataBlock(title, msg, iconPath) {
+  return '<div class="weekly-no-data" style="margin-top:32px;"><div class="weekly-no-data-icon"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + iconPath + '</svg></div><div class="weekly-no-data-title">' + esc(title) + '</div><div class="weekly-no-data-sub">' + esc(msg) + '</div></div>';
 }
-
-function renderYearlyNoData(msg) {
-  document.getElementById('yearlyContent').innerHTML =
-    '<div class="weekly-no-data" style="margin-top:32px;"><div class="weekly-no-data-icon"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="weekly-no-data-title">No 2026 Data</div><div class="weekly-no-data-sub">' + esc(msg) + '</div></div>';
-}
-
-// ── BUILDERS ─────────────────────────────────────────────────
-function sectionHeader(title, iconPath, fullWidth) {
-  return '<div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24">' + iconPath + '</svg></div><div class="section-title-wrap"><div class="section-title">' + esc(title) + '</div></div>' + (fullWidth ? '<div class="section-line"></div>' : '') + '</div>';
-}
-
-function buildListHtml(items, zeroFilter, successTitle, successMsg) {
-  var filtered = items;
-  if (zeroFilter) {
-    filtered = items.filter(function(item){
-      if (item.val==null||item.val==='') return false;
-      var n=parseFloat(item.val); return !isNaN(n)&&n>0;
-    });
-    if (!filtered.length) {
-      return '<div class="metric-list"><div class="metric-row" style="gap:14px;">' +
-        '<div style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--success-bg);border:1px solid var(--success-bd);border-radius:4px;color:var(--success);flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-        '<div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;letter-spacing:.05em;color:var(--success);">' + esc(successTitle||'No Issues Recorded') + '</div>' +
-        '<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:rgba(var(--success-rgb),0.6);letter-spacing:.08em;margin-top:2px;">' + esc(successMsg||'Great job — keep it up!') + '</div></div>' +
-        '</div></div>';
-    }
-  }
-  return '<div class="metric-list">' + filtered.map(function(item){
-    var val=item.val, display='—', cls='neutral';
-    if (val!=null&&val!=='') {
-      var n=parseFloat(val);
-      if (!isNaN(n)) {
-        if (item.fmt==='pct') {
-          var pv=n>1?n:n*100; display=pv.toFixed(2)+'%';
-          if (!item.neutral) cls=pv>=item.thresholds[0]?'green':pv>=item.thresholds[1]?'amber':'red';
-        } else if (item.fmt==='dec') {
-          display=n.toFixed(2);
-          if (!item.neutral) { if(item.zero) cls=n===0?'green':n<=0.5?'amber':'red'; else cls=n>=item.thresholds[0]?'green':n>=item.thresholds[1]?'amber':'red'; }
-        } else { display=String(Math.round(n)); }
-      }
-    }
-    return '<div class="metric-row"><div class="metric-name">'+esc(item.name)+(item.sub?'<span class="sub">'+esc(item.sub)+'</span>':'')+'</div><div class="metric-chip '+cls+'">'+display+'</div></div>';
-  }).join('')+'</div>';
-}
-
-// ── FOCUS CARDS ──────────────────────────────────────────────
-var FOCUS_ICONS = {
-  sph:    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-  dcr:    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
-  pod:    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
-  shield: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-  dsb:    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
-  cdf:    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-  trophy: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a2 2 0 0 0-2 2v2a4 4 0 0 0 4 4h.1M17 4h3a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h-.1M7 4h10v6a5 5 0 0 1-10 0V4z"/></svg>',
-};
 
 function iconWrap(svg) {
-  return '<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:3px;flex-shrink:0;color:var(--accent);">'+svg+'</span>';
+  return '<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:3px;flex-shrink:0;color:var(--accent);">' + svg + '</span>';
 }
 
 function renderFocus(d, areaId, cardsId) {
   var areas = [];
-  var podVal=d.pod, dcrVal=d.dcr, sphVal=d.sph!=null?d.sph:d.weeklySph;
+  var podVal = d.pod;
+  var dcrVal = d.dcr;
+  var sphVal = d.sph != null ? d.sph : d.weeklySph;
 
-  if (podVal!=null&&(parseFloat(podVal)>1?parseFloat(podVal):parseFloat(podVal)*100)<99.5)
-    areas.push({icon:FOCUS_ICONS.pod,title:'Photo on Delivery (POD)',text:'Your photos need to meet Amazon\'s quality standards. Step back to frame the package clearly in a safe, recognizable location. Avoid blurry images, poor lighting, people in frame, shadows, reflections, or anything showing addresses or license plates. Never photograph from inside the van or while holding the package. Always review before submitting.'});
-  if (dcrVal!=null&&(parseFloat(dcrVal)>1?parseFloat(dcrVal):parseFloat(dcrVal)*100)<99.5)
-    areas.push({icon:FOCUS_ICONS.dcr,title:'Delivery Completion Rate (DCR)',text:'This measures successful deliveries or valid returns. Always attempt delivery first. Call the customer and let it ring at least 12 seconds, send a text if no answer, and contact Driver Support when needed. Log every attempt immediately and use the correct RTS codes.'});
-  if (sphVal!=null&&parseFloat(sphVal)<20)
-    areas.push({icon:FOCUS_ICONS.sph,title:'Stops Per Hour (SPH)',text:'The minimum requirement is 20 stops per hour. To improve efficiency, organize your next bag in the cabin, minimize time in the van at each stop, and move purposefully but safely between the van and delivery point.'});
+  if (podVal != null && pctValue(podVal) < 99.5) {
+    areas.push({ icon:FOCUS_ICONS.pod, title:'Photo on Delivery (POD)', text:'Photos need to meet Amazon quality standards. Step back to frame the package clearly in a safe, recognizable location. Avoid blurry images, poor lighting, people in frame, shadows, reflections, addresses, or license plates. Always review before submitting.' });
+  }
 
-  var safetySum=(parseFloat(d.seatbelt)||0)+(parseFloat(d.speeding)||0)+(parseFloat(d.distractions)||0)+(parseFloat(d.following)||0)+(parseFloat(d.signViolations)||0);
-  if (safetySum>0) areas.push({icon:FOCUS_ICONS.shield,title:'Safe Driving',text:'Amazon monitors speeding, seatbelt use, phone distractions, tailgating, and rolling stops. Always buckle up properly, avoid phone use unless mounted, maintain safe following distance, obey all traffic signs, and never rush through lights or stop signs.'});
+  if (dcrVal != null && pctValue(dcrVal) < 99.5) {
+    areas.push({ icon:FOCUS_ICONS.dcr, title:'Delivery Completion Rate (DCR)', text:'This measures successful deliveries or valid returns. Always attempt delivery first. Call the customer and let it ring at least 12 seconds, send a text if no answer, and contact Driver Support when needed. Log every attempt immediately and use the correct RTS codes.' });
+  }
 
-  var dsbSum=(parseFloat(d.simultaneous)||0)+(parseFloat(d.delivered50m)||0)+(parseFloat(d.incorrectAttended)||0)+(parseFloat(d.incorrectUnattended)||0)+(parseFloat(d.noPod)||0)+(parseFloat(d.scannedNotDelivered)||0);
-  if (dsbSum>0) areas.push({icon:FOCUS_ICONS.dsb,title:'Delivery Success Behaviors (DSB)',text:'This tracks errors that result in \'package not received\' reports. Always verify the address, especially at group stops. Deliver within the geopin zone, use the proper scan type (attended or unattended), and capture clear PODs. Only mark deliveries as Receptionist or Household Member when genuinely applicable.'});
+  if (sphVal != null && parseFloat(sphVal) < 20) {
+    areas.push({ icon:FOCUS_ICONS.sph, title:'Stops Per Hour (SPH)', text:'The minimum requirement is 20 stops per hour. To improve efficiency, organize your next bag in the cabin, minimize time in the van at each stop, and move purposefully but safely between the van and delivery point.' });
+  }
 
-  var cdfSum=(parseFloat(d.mishandled)||0)+(parseFloat(d.unprofessional)||0)+(parseFloat(d.noFollowInstructions)||0)+(parseFloat(d.wrongAddress)||0)+(parseFloat(d.neverReceived)||0)+(parseFloat(d.wrongItem)||0);
-  if (cdfSum>0) areas.push({icon:FOCUS_ICONS.cdf,title:'Customer Delivery Feedback (CDF)',text:'This reflects complaints about issues under your control: wrong address, ignored instructions, or unprofessional conduct. Always verify addresses, follow delivery notes precisely, and place packages in secure, discreet locations. Stay professional: wear your uniform, keep music volume low, and avoid personal calls during deliveries. When uncertain, contact the customer or Driver Support.'});
+  var safetySum = sumFields(d, ['seatbelt','speeding','distractions','following','signViolations']);
+  if (safetySum > 0) {
+    areas.push({ icon:FOCUS_ICONS.shield, title:'Safe Driving', text:'Amazon monitors speeding, seatbelt use, phone distractions, tailgating, and rolling stops. Always buckle up properly, avoid phone use unless mounted, maintain safe following distance, obey all traffic signs, and never rush through lights or stop signs.' });
+  }
 
-  var fa=document.getElementById(areaId), fc=document.getElementById(cardsId);
-  if (!fa||!fc) return;
-  fa.style.display='block';
+  var dsbSum = sumFields(d, ['simultaneous','delivered50m','incorrectAttended','incorrectUnattended','noPod','scannedNotDelivered']);
+  if (dsbSum > 0) {
+    areas.push({ icon:FOCUS_ICONS.dsb, title:'Delivery Success Behaviors (DSB)', text:'This tracks errors that result in package not received reports. Always verify the address, especially at group stops. Deliver within the geopin zone, use the proper scan type, and capture clear PODs. Only mark deliveries as Receptionist or Household Member when genuinely applicable.' });
+  }
+
+  var cdfSum = sumFields(d, ['mishandled','unprofessional','noFollowInstructions','wrongAddress','neverReceived','wrongItem']);
+  if (cdfSum > 0) {
+    areas.push({ icon:FOCUS_ICONS.cdf, title:'Customer Delivery Feedback (CDF)', text:'This reflects complaints about issues under your control: wrong address, ignored instructions, or unprofessional conduct. Always verify addresses, follow delivery notes precisely, and place packages in secure, discreet locations. Stay professional, keep music volume low, and avoid personal calls during deliveries. When uncertain, contact the customer or Driver Support.' });
+  }
+
+  var fa = document.getElementById(areaId);
+  var fc = document.getElementById(cardsId);
+  if (!fa || !fc) return;
+
+  fa.style.display = 'block';
 
   if (!areas.length) {
-    fc.innerHTML='<div class="all-good"><div class="all-good-icon" style="color:var(--success);">'+FOCUS_ICONS.trophy+'</div><div><div class="all-good-title">Outstanding Work</div><div class="all-good-sub">You\'re excelling across all metrics—quality photos, strong pace, completed deliveries, safe driving, and positive customer interactions. Keep up the excellent work.</div></div></div>';
+    fc.innerHTML = '<div class="all-good"><div class="all-good-icon" style="color:var(--success);">' + FOCUS_ICONS.trophy + '</div><div><div class="all-good-title">Outstanding Work</div><div class="all-good-sub">You are excelling across all metrics: quality photos, strong pace, completed deliveries, safe driving, and positive customer interactions. Keep up the excellent work.</div></div></div>';
     return;
   }
-  fc.innerHTML=areas.map(function(a,i){
-    return '<div class="focus-card" style="animation-delay:'+(i*.08)+'s"><div class="focus-card-title">'+iconWrap(a.icon)+'&nbsp;'+esc(a.title)+'</div><p>'+esc(a.text)+'</p></div>';
+
+  fc.innerHTML = areas.map(function(a, i){
+    return '<div class="focus-card" style="animation-delay:' + (i * .08) + 's"><div class="focus-card-title">' + iconWrap(a.icon) + '&nbsp;' + esc(a.title) + '</div><p>' + esc(a.text) + '</p></div>';
   }).join('');
 }
 
+function sumFields(obj, keys) {
+  return keys.reduce(function(total, key){
+    return total + (parseFloat(obj[key]) || 0);
+  }, 0);
+}
+
 function setAllEmpty(msg) {
-  var el=document.getElementById('dailyContent');
-  if (el) el.innerHTML='<div class="metric-row" style="color:var(--text-muted);font-family:\'DM Mono\',monospace;font-size:10px;margin-top:24px;">'+esc(msg)+'</div>';
+  var el = document.getElementById('dailyContent');
+  if (el) el.innerHTML = '<div class="metric-row" style="color:var(--text-muted);font-family:\'DM Mono\',monospace;font-size:10px;margin-top:24px;">' + esc(msg) + '</div>';
 }
 
 function reObserve() {
-  var items = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    items.forEach(function(el){ el.classList.add('visible'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  items.forEach(function(el){
-    if (!el.classList.contains('visible')) io.observe(el);
-  });
+  scrollReveal('.reveal');
 }
 </script>
 </body>
