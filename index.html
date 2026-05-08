@@ -510,6 +510,10 @@ function loadData(driver) {
       var weekly = d.weekly || null;
       var resolvedName = daily.driver || driver;
 
+      if ((!daily.feedbackDetails || !String(daily.feedbackDetails).trim()) && weekly && weekly.feedbackDetails) {
+        daily.feedbackDetails = weekly.feedbackDetails;
+      }
+
       if (_allDrivers.indexOf(resolvedName) === -1) {
         _allDrivers.push(resolvedName);
         try { sessionStorage.setItem('dsp_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
