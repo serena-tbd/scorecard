@@ -510,7 +510,7 @@ function loadData(driver) {
       var weekly = d.weekly || null;
       var resolvedName = daily.driver || driver;
 
-      if ((!daily.feedbackDetails || !String(daily.feedbackDetails).trim()) && weekly && weekly.feedbackDetails) {
+      if ((!daily.feedbackDetails || !String(daily.feedbackDetails).trim()) && weekly && weekly.feedbackDetails && String(weekly.feedbackDetails).trim()) {
         daily.feedbackDetails = weekly.feedbackDetails;
       }
 
@@ -704,7 +704,7 @@ function renderDaily(d) {
   ], true, 'No Issues Recorded', 'Thank you for ensuring the customer has a great experience.') + '</div>';
   html += '</div>';
 
-  if (d.feedbackDetails && d.feedbackDetails.trim()) {
+  if (d.feedbackDetails && String(d.feedbackDetails).trim()) {
     html += '<div class="feedback-box"><div class="feedback-box-label">Customer Feedback Notes</div>' + esc(d.feedbackDetails) + '</div>';
   }
 
@@ -774,7 +774,7 @@ function renderWeekly(w) {
   ], true, 'No CDF Issues', 'Excellent customer experience this week.') + '</div>';
   html += '</div>';
 
-  if (w.feedbackDetails && w.feedbackDetails.trim()) {
+  if (w.feedbackDetails && String(w.feedbackDetails).trim()) {
     html += '<div class="feedback-box"><div class="feedback-box-label">Customer Feedback Notes</div>' + esc(w.feedbackDetails) + '</div>';
   }
 
