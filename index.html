@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0d0e10">
+<meta name="theme-color" content="#0b0f0c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>AVLG Daily Scorecard</title>
@@ -11,45 +11,45 @@
 
 <style>
 :root {
-  --bg: #0d0e10;
-  --surface-0: #0d0e10;
-  --surface-1: #141618;
-  --surface-2: #1a1c20;
-  --surface-3: #202328;
+  --bg: #0b0f0c;
+  --surface-0: #0b0f0c;
+  --surface-1: #111710;
+  --surface-2: #171e16;
+  --surface-3: #1d261b;
 
-  --gold: #e8b84b;
-  --gold-bright: #f5cc6a;
-  --gold-dim: #b8923a;
-  --gold-muted: #8c6e2c;
-  --gold-rgb: 232,184,75;
-  --gold-bg: rgba(232,184,75,.07);
-  --gold-bg-strong: rgba(232,184,75,.13);
-  --gold-bd: rgba(232,184,75,.22);
-  --gold-bd-strong: rgba(232,184,75,.45);
+  --gold: #5aad6e;
+  --gold-bright: #7dc98e;
+  --gold-dim: #3d8450;
+  --gold-muted: #2a5c37;
+  --gold-rgb: 90,173,110;
+  --gold-bg: rgba(90,173,110,.07);
+  --gold-bg-strong: rgba(90,173,110,.13);
+  --gold-bd: rgba(90,173,110,.25);
+  --gold-bd-strong: rgba(90,173,110,.50);
 
-  --green: #4cc98a;
-  --green-rgb: 76,201,138;
-  --green-bg: rgba(76,201,138,.08);
-  --green-bd: rgba(76,201,138,.22);
+  --green: #5aad6e;
+  --green-rgb: 90,173,110;
+  --green-bg: rgba(90,173,110,.09);
+  --green-bd: rgba(90,173,110,.28);
 
-  --amber: #e8a94b;
-  --amber-rgb: 232,169,75;
-  --amber-bg: rgba(232,169,75,.09);
-  --amber-bd: rgba(232,169,75,.28);
+  --amber: #d49a42;
+  --amber-rgb: 212,154,66;
+  --amber-bg: rgba(212,154,66,.09);
+  --amber-bd: rgba(212,154,66,.28);
 
-  --red: #f2706a;
-  --red-rgb: 242,112,106;
-  --red-bg: rgba(242,112,106,.09);
-  --red-bd: rgba(242,112,106,.28);
+  --red: #e8655f;
+  --red-rgb: 232,101,95;
+  --red-bg: rgba(232,101,95,.09);
+  --red-bd: rgba(232,101,95,.28);
 
-  --text: #f2efe8;
-  --text-soft: #ccc9c0;
-  --text-muted: #8a8880;
-  --text-dim: #55534e;
+  --text: #edf2ec;
+  --text-soft: #c4cdc2;
+  --text-muted: #7d8c7b;
+  --text-dim: #4a5449;
 
-  --bd: rgba(255,255,255,.09);
-  --bd-soft: rgba(255,255,255,.06);
-  --bd-subtle: rgba(255,255,255,.04);
+  --bd: rgba(180,220,180,.09);
+  --bd-soft: rgba(180,220,180,.06);
+  --bd-subtle: rgba(180,220,180,.04);
 
   --r: 10px;
   --r-sm: 6px;
@@ -189,14 +189,14 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(var(--gold-rgb),.055) 0%, transparent 65%);
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(90,173,110,.055) 0%, transparent 65%);
   pointer-events: none;
 }
 .hero-line-top {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(var(--gold-rgb),.55) 30%, rgba(var(--gold-rgb),.55) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(90,173,110,.55) 30%, rgba(90,173,110,.55) 70%, transparent 100%);
 }
 
 .hero-inner {
@@ -279,7 +279,7 @@ body {
   stroke-dasharray: 263.89;
   stroke-dashoffset: 263.89;
   transition: stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1);
-  filter: drop-shadow(0 0 6px rgba(var(--gold-rgb),.35));
+  filter: drop-shadow(0 0 6px rgba(90,173,110,.35));
 }
 .ring-center {
   position: absolute;
@@ -393,7 +393,7 @@ body {
 .tab-btn.active {
   color: var(--gold);
   border-bottom-color: var(--gold);
-  background: rgba(var(--gold-rgb),.04);
+  background: rgba(90,173,110,.04);
 }
 .tab-btn:focus { outline:none; }
 .tab-btn:focus-visible { box-shadow: inset 0 0 0 1px var(--gold-bd); }
@@ -575,7 +575,7 @@ body {
   stroke-dasharray: 219.91;
   stroke-dashoffset: 219.91;
   transition: stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1);
-  filter: drop-shadow(0 0 5px rgba(var(--gold-rgb),.3));
+  filter: drop-shadow(0 0 5px rgba(90,173,110,.3));
 }
 .w-ring-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .w-ring-score { font-family:'DM Sans',sans-serif; font-size:17px; font-weight:800; color:var(--gold); line-height:1; }
@@ -928,7 +928,7 @@ function buildList(items, zeroFilter, okTitle, okMsg){
       '<div style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:5px;color:var(--green);flex-shrink:0;">'+
       '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.check+'</svg></div>'+
       '<div><div style="font-size:14px;font-weight:700;color:var(--green);">'+esc(okTitle||'No Issues Recorded')+'</div>'+
-      '<div style="font-family:\'DM Mono\',monospace;font-size:9.5px;color:rgba(76,201,138,.55);letter-spacing:.08em;margin-top:2px;">'+esc(okMsg||'Keep it up!')+'</div></div>'+
+      '<div style="font-family:\'DM Mono\',monospace;font-size:9.5px;color:rgba(90,173,110,.55);letter-spacing:.08em;margin-top:2px;">'+esc(okMsg||'Keep it up!')+'</div></div>'+
     '</div></div>';
   }
 
