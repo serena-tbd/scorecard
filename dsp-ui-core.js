@@ -80,6 +80,7 @@ Tampermonkey:
   window.DSP_UI_CORE_LOADED = true;
 
   window.DSP_UI = window.DSP_UI || {};
+  const DSP_UI = window.DSP_UI;
 
   /* ══════════════════════════════════════════════════════════
      THEME TOKENS
