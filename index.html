@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#070a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>ONTH Daily Scorecard</title>
+<title> Daily Scorecard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/onth-bot/dsp-shared-ui@main/dsp-ui-core.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/serena-helepr/dsp-shared-ui@main/dsp-ui-core.js"></script>
 <script>window.DSP_UI && DSP_UI.injectTheme && DSP_UI.injectTheme();</script>
 
 <style>
@@ -424,17 +424,6 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
       <div class="hero-name-label">Driver</div>
       <div class="hero-name" id="heroName">Loading...</div>
 
-      <div class="hero-actions">
-        <a class="hero-action" href="https://onth-bot.github.io/onth-dashboard/">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          ONTH Dashboard
-        </a>
-        <a class="hero-action" id="gamePlanBtn" href="#">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          Your Daily Gameplan
-        </a>
-      </div>
-
       <div class="hero-score-row" id="heroScoreRow" style="display:none;">
         <div class="score-ring-wrap">
           <svg viewBox="0 0 96 96">
@@ -488,7 +477,7 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
   <footer class="footer">
     <div class="footer-logo">On The <span>Level</span> Logistics</div>
     <p>825 N Clovis Ave &nbsp;&middot;&nbsp; Fresno, CA &nbsp;&middot;&nbsp; DSJ5</p>
-    <p class="footer-internal">ONTH INTERNAL USE ONLY</p>
+    <p class="footer-internal"> INTERNAL USE ONLY</p>
   </footer>
 </div>
 
@@ -539,23 +528,23 @@ function init() {
 
 function showSearchPage() {
   document.getElementById('searchPage').classList.add('active');
-  document.title = 'ONTH Driver Scorecard';
+  document.title = ' Driver Scorecard';
   loadDriverList();
   setupSearch();
 }
 
 function showScorecardPage(driver) {
   document.getElementById('scorecardPage').classList.add('active');
-  document.title = driver + ' - ONTH Scorecard';
+  document.title = driver + ' -  Scorecard';
   document.getElementById('heroName').textContent = driver;
-  document.getElementById('gamePlanBtn').href = 'https://onth-bot.github.io/gameplan/?driver=' + encodeURIComponent(driver);
+  document.getElementById('gamePlanBtn').href = 'https://-bot.github.io/gameplan/?driver=' + encodeURIComponent(driver);
   loadData(driver);
   reObserve();
 }
 
 function loadDriverList() {
   try {
-    var cached = sessionStorage.getItem('onth_driver_list');
+    var cached = sessionStorage.getItem('_driver_list');
     if (cached) {
       var cachedDrivers = JSON.parse(cached);
       if (Array.isArray(cachedDrivers) && cachedDrivers.length > 1) {
@@ -571,7 +560,7 @@ function loadDriverList() {
     .then(function(d){
       if (d.drivers && d.drivers.length) {
         _allDrivers = d.drivers;
-        try { sessionStorage.setItem('onth_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
+        try { sessionStorage.setItem('_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
       }
       finishDriverList();
     })
@@ -729,7 +718,7 @@ function formatDisplayDate(dateString) {
   if (!dateString) return '';
   var d = new Date(dateString);
   if (isNaN(d)) return dateString;
-  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' }).toUpperCase();
+  return d.toLocaleDateString('en-US', { weekday:'long', m:'long', day:'numeric', year:'numeric' }).toUpperCase();
 }
 
 function pctValue(v) {
