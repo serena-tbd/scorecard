@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title> Daily Scorecard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/serena-helepr/dsp-shared-ui@main/dsp-ui-core.js"></script>
-<script>window.DSP_UI && DSP_UI.injectTheme && DSP_UI.injectTheme();</script>
+<script src="./DSP%20Theme.js"></script>
+<script>window.DSP_UI && window.DSP_UI.injectTheme && window.DSP_UI.injectTheme();</script>
 
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -487,6 +487,7 @@ var _cachedData = null;
 var _allDrivers = [];
 var _listLoaded = false;
 var _listCallbacks = [];
+var DSP_UI = window.DSP_UI;
 var esc = DSP_UI.esc;
 
 var ICONS = {
@@ -537,7 +538,6 @@ function showScorecardPage(driver) {
   document.getElementById('scorecardPage').classList.add('active');
   document.title = driver + ' -  Scorecard';
   document.getElementById('heroName').textContent = driver;
-  document.getElementById('gamePlanBtn').href = 'https://-bot.github.io/gameplan/?driver=' + encodeURIComponent(driver);
   loadData(driver);
   reObserve();
 }
@@ -1361,4 +1361,3 @@ function reObserve() {
 </script>
 </body>
 </html>
-```
