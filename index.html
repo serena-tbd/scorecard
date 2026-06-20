@@ -8,8 +8,20 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Driver Scorecard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/serena-helepr/dsp-shared-ui@main/dsp-ui-core.js"></script>
-<script>window.DSP_UI && DSP_UI.injectTheme && DSP_UI.injectTheme();</script>
+<script src="./dsp-ui-core.js"></script>
+<script>
+window.DSP_UI = window.DSP_UI || {};
+DSP_UI.esc = DSP_UI.esc || function(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+    return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+  });
+};
+DSP_UI.scrollReveal = DSP_UI.scrollReveal || function(sel) {
+  document.querySelectorAll(sel || '.reveal').forEach(function(el){ el.classList.add('visible'); });
+};
+DSP_UI.syncThemeColor = DSP_UI.syncThemeColor || function(){};
+if (DSP_UI.injectTheme) DSP_UI.injectTheme();
+</script>
 
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -1453,4 +1465,3 @@ function reObserve() {
 </script>
 </body>
 </html>
-```
