@@ -83,6 +83,26 @@ Tampermonkey:
   const DSP_UI = window.DSP_UI;
 
   /* ══════════════════════════════════════════════════════════
+     DSP PROFILE
+     Keep all DSP-specific names, links, and data endpoints here.
+     Universal pages can read this through DSP_UI.dsp.
+     Replace TBD values when this DSP has confirmed details.
+     ══════════════════════════════════════════════════════════ */
+
+  DSP_UI.dsp = Object.assign({
+    shortCode:       "TBD",
+    name:            "TBD",
+    brandHtml:       "TBD",
+    footerBrandHtml: "TBD",
+    location:        "TBD",
+    city:            "TBD",
+    apiUrl:          "TBD",
+    dashboardUrl:    "TBD",
+    gamePlanUrl:     "TBD",
+    internalLabel:   "TBD INTERNAL USE ONLY"
+  }, DSP_UI.dsp || {});
+
+  /* ══════════════════════════════════════════════════════════
      THEME TOKENS
      ══════════════════════════════════════════════════════════ */
 
