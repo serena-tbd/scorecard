@@ -6,10 +6,10 @@
 <meta name="theme-color" content="#070a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Scorecard</title>
+<title>Driver Scorecard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="./dsp-ui-core.js"></script>
-<script>window.DSP_UI && window.DSP_UI.injectTheme && window.DSP_UI.injectTheme();</script>
+<script src="https://cdn.jsdelivr.net/gh/onth-bot/dsp-shared-ui@main/dsp-ui-core.js"></script>
+<script>window.DSP_UI && DSP_UI.injectTheme && DSP_UI.injectTheme();</script>
 
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -73,6 +73,9 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
 .hero-date-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);}
 .hero-name-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:4px;}
 .hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,13vw,88px);line-height:.88;letter-spacing:.02em;color:var(--text);text-shadow:0 2px 40px rgba(var(--accent-rgb),.12);animation:dsp-nameReveal .7s ease both;margin-bottom:16px;text-wrap:balance;}
+.hero-team-lead{display:none;align-items:center;gap:8px;width:max-content;max-width:100%;margin:-4px 0 18px;padding:7px 11px;border:1px solid var(--accent-bd);border-radius:var(--radius-md);background:rgba(var(--accent-rgb),.075);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted);}
+.hero-team-lead svg{flex:0 0 auto;color:var(--accent);}
+.hero-team-lead span{color:var(--text);overflow-wrap:anywhere;}
 .hero-actions{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
 .hero-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:rgba(var(--accent-rgb),.075);border:1px solid var(--accent-bd);padding:8px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-radius:var(--radius-md);transition:background .18s ease,transform .18s ease,border-color .18s ease;}
 .hero-action:hover{background:rgba(var(--accent-rgb),.14);border-color:var(--accent-bd-strong);transform:translateY(-1px);}
@@ -362,6 +365,7 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
   .hero-top{align-items:flex-start;}
   .hero-date-badge{width:100%;}
   .hero-name{font-size:clamp(42px,15vw,64px);}
+  .hero-team-lead{width:100%;justify-content:center;margin-bottom:14px;line-height:1.4;}
   .hero-actions{display:grid;grid-template-columns:1fr;}
   .hero-action{width:100%;padding:9px 12px;}
   .score-ring-wrap,.score-ring-wrap svg{width:86px;height:86px;}
@@ -403,8 +407,8 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 <body>
 <div id="searchPage">
-  <div class="search-logo">TBD <span>TBD</span></div>
-  <div class="search-sub">TBD &middot; Driver Scorecard</div>
+  <div class="search-logo" data-dsp="brandHtml">On The <span>Level</span></div>
+  <div class="search-sub" data-dsp="searchSubtitle">DSJ5 &middot; Driver Scorecard</div>
   <div class="search-box">
     <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input type="text" class="search-input" id="driverSearch" placeholder="Search driver name..." autocomplete="off" autocorrect="off" spellcheck="false">
@@ -417,12 +421,27 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
   <div class="hero-card">
     <div class="hero-inner">
       <div class="hero-top">
-        <div class="hero-badge">TBD &middot; Scorecard</div>
+        <div class="hero-badge" data-dsp="heroBadge">DSJ5 &middot; Scorecard</div>
         <div class="hero-date-badge" id="heroDt">LOADING...</div>
       </div>
 
       <div class="hero-name-label">Driver</div>
       <div class="hero-name" id="heroName">Loading...</div>
+      <div class="hero-team-lead" id="heroTeamLead">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+        Team Lead: <span id="heroTeamLeadName"></span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="hero-action" id="dashboardBtn" href="https://onth-bot.github.io/onth-dashboard/">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span data-dsp="dashboardLabel">ONTH Dashboard</span>
+        </a>
+        <a class="hero-action" id="gamePlanBtn" href="#">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Your Daily Gameplan
+        </a>
+      </div>
 
       <div class="hero-score-row" id="heroScoreRow" style="display:none;">
         <div class="score-ring-wrap">
@@ -475,18 +494,31 @@ body{background:var(--page-bg);color:var(--text);font-family:'DM Sans',sans-seri
   <div class="tab-pane" id="tab-yearly"><div class="wrapper"><div class="reveal" id="yearlyContent"></div></div></div>
 
   <footer class="footer">
-    <div class="footer-logo">TBD <span>TBD</span> Logistics</div>
-    <p class="footer-internal"> INTERNAL USE ONLY</p>
+    <div class="footer-logo" data-dsp="footerBrandHtml">On The <span>Level</span> Logistics</div>
+    <p data-dsp="footerLocation">825 N Clovis Ave &nbsp;&middot;&nbsp; Fresno, CA &nbsp;&middot;&nbsp; DSJ5</p>
+    <p class="footer-internal" data-dsp="internalLabel">ONTH INTERNAL USE ONLY</p>
   </footer>
 </div>
 
 <script>
-var API_URL = 'https://script.google.com/macros/s/AKfycbxb9ZQAxdZ9JeDi60V4Qwkhdn4gj3DTKzbabDfSH-0wUUcEKSIR3m_liDjErk4qf-X59Q/exec';
+var DEFAULT_DSP = {
+  shortCode: 'DSJ5',
+  name: 'On The Level Logistics',
+  brandHtml: 'On The <span>Level</span>',
+  footerBrandHtml: 'On The <span>Level</span> Logistics',
+  location: '825 N Clovis Ave',
+  city: 'Fresno, CA',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbxb9ZQAxdZ9JeDi60V4Qwkhdn4gj3DTKzbabDfSH-0wUUcEKSIR3m_liDjErk4qf-X59Q/exec',
+  dashboardUrl: 'https://onth-bot.github.io/onth-dashboard/',
+  gamePlanUrl: 'https://onth-bot.github.io/gameplan/',
+  internalLabel: 'ONTH INTERNAL USE ONLY'
+};
+var DSP_CONFIG = getDspConfig();
+var API_URL = DSP_CONFIG.apiUrl;
 var _cachedData = null;
 var _allDrivers = [];
 var _listLoaded = false;
 var _listCallbacks = [];
-var DSP_UI = window.DSP_UI;
 var esc = DSP_UI.esc;
 
 var ICONS = {
@@ -515,9 +547,27 @@ var FOCUS_ICONS = {
 
 document.addEventListener('DOMContentLoaded', init);
 
+function getDspConfig() {
+  var fromCore = (window.DSP_UI && (DSP_UI.dsp || DSP_UI.profile || DSP_UI.config)) || {};
+  var fromPage = window.DSP_PROFILE || window.DSP_CONFIG || {};
+  var cfg = Object.assign({}, DEFAULT_DSP, fromCore, fromPage);
+  cfg.shortCode = cfg.shortCode || cfg.code || cfg.station || DEFAULT_DSP.shortCode;
+  cfg.name = cfg.name || cfg.companyName || DEFAULT_DSP.name;
+  cfg.brandHtml = cfg.brandHtml || esc(cfg.name);
+  cfg.footerBrandHtml = cfg.footerBrandHtml || cfg.brandHtml;
+  cfg.searchSubtitle = cfg.searchSubtitle || cfg.shortCode + ' &middot; Driver Scorecard';
+  cfg.heroBadge = cfg.heroBadge || cfg.shortCode + ' &middot; Scorecard';
+  cfg.dashboardLabel = cfg.dashboardLabel || cfg.shortCode + ' Dashboard';
+  cfg.internalLabel = cfg.internalLabel || cfg.shortCode + ' INTERNAL USE ONLY';
+  cfg.footerLocation = cfg.footerLocation || [cfg.location, cfg.city, cfg.shortCode].filter(Boolean).join(' &nbsp;&middot;&nbsp; ');
+  cfg.cacheKey = cfg.cacheKey || ('driver_list_' + String(cfg.shortCode).toLowerCase());
+  return cfg;
+}
+
 function init() {
   DSP_UI.injectTheme();
   DSP_UI.syncThemeColor();
+  applyDspConfig();
 
   var params = new URLSearchParams(window.location.search);
   var driver = (params.get('driver') || '').trim();
@@ -526,24 +576,58 @@ function init() {
   else showScorecardPage(driver);
 }
 
+function setDspHtml(key, value) {
+  document.querySelectorAll('[data-dsp="' + key + '"]').forEach(function(el){
+    el.innerHTML = value || '';
+  });
+}
+
+function setDspText(key, value) {
+  document.querySelectorAll('[data-dsp="' + key + '"]').forEach(function(el){
+    el.textContent = value || '';
+  });
+}
+
+function applyDspConfig() {
+  setDspHtml('brandHtml', DSP_CONFIG.brandHtml);
+  setDspHtml('footerBrandHtml', DSP_CONFIG.footerBrandHtml);
+  setDspHtml('searchSubtitle', DSP_CONFIG.searchSubtitle);
+  setDspHtml('heroBadge', DSP_CONFIG.heroBadge);
+  setDspHtml('footerLocation', DSP_CONFIG.footerLocation);
+  setDspText('dashboardLabel', DSP_CONFIG.dashboardLabel);
+  setDspText('internalLabel', DSP_CONFIG.internalLabel);
+  document.getElementById('dashboardBtn').href = DSP_CONFIG.dashboardUrl || '#';
+}
+
 function showSearchPage() {
   document.getElementById('searchPage').classList.add('active');
-  document.title = ' Driver Scorecard';
+  document.title = DSP_CONFIG.shortCode + ' Driver Scorecard';
   loadDriverList();
   setupSearch();
 }
 
 function showScorecardPage(driver) {
   document.getElementById('scorecardPage').classList.add('active');
-  document.title = driver + ' -  Scorecard';
+  document.title = driver + ' - ' + DSP_CONFIG.shortCode + ' Scorecard';
   document.getElementById('heroName').textContent = driver;
+  document.getElementById('gamePlanBtn').href = addDriverParam(DSP_CONFIG.gamePlanUrl, driver);
   loadData(driver);
   reObserve();
 }
 
+function addDriverParam(url, driver) {
+  if (!url) return '#';
+  var sep = url.indexOf('?') === -1 ? '?' : '&';
+  return url + sep + 'driver=' + encodeURIComponent(driver);
+}
+
+function dspLocationLine() {
+  return [DSP_CONFIG.shortCode, DSP_CONFIG.city].filter(Boolean).join(' - ');
+}
+
 function loadDriverList() {
   try {
-    var cached = sessionStorage.getItem('_driver_list');
+    var cached = sessionStorage.getItem(DSP_CONFIG.cacheKey);
     if (cached) {
       var cachedDrivers = JSON.parse(cached);
       if (Array.isArray(cachedDrivers) && cachedDrivers.length > 1) {
@@ -559,7 +643,7 @@ function loadDriverList() {
     .then(function(d){
       if (d.drivers && d.drivers.length) {
         _allDrivers = d.drivers;
-        try { sessionStorage.setItem('_driver_list', JSON.stringify(_allDrivers)); } catch(e) {}
+        try { sessionStorage.setItem(DSP_CONFIG.cacheKey, JSON.stringify(_allDrivers)); } catch(e) {}
       }
       finishDriverList();
     })
@@ -698,6 +782,12 @@ function loadData(driver) {
       }
 
       document.getElementById('heroDt').textContent = daily.date ? formatDisplayDate(daily.date) : 'NO RECENT SHIFT';
+      document.getElementById('heroName').textContent = resolvedName;
+
+      var teamLead = daily.teamLead ? String(daily.teamLead).trim() : '';
+      document.getElementById('heroTeamLead').style.display = teamLead ? 'inline-flex' : 'none';
+      document.getElementById('heroTeamLeadName').textContent = teamLead;
+
       renderDaily(daily);
       renderWeekly(weekly);
       renderRolling6(yearly);
@@ -717,7 +807,7 @@ function formatDisplayDate(dateString) {
   if (!dateString) return '';
   var d = new Date(dateString);
   if (isNaN(d)) return dateString;
-  return d.toLocaleDateString('en-US', { weekday:'long', m:'long', day:'numeric', year:'numeric' }).toUpperCase();
+  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' }).toUpperCase();
 }
 
 function pctValue(v) {
@@ -800,7 +890,8 @@ function buildListHtml(items, zeroFilter, successTitle, successMsg) {
         } else if (item.fmt === 'dec') {
           display = n.toFixed(2);
           if (!item.neutral) {
-            if (item.zero) cls = n === 0 ? 'green' : n <= .5 ? 'amber' : 'red';
+            if (item.zeroBest) cls = n === 0 ? 'green' : 'red';
+            else if (item.zero) cls = n === 0 ? 'green' : n <= .5 ? 'amber' : 'red';
             else cls = n >= item.thresholds[0] ? 'green' : n >= item.thresholds[1] ? 'amber' : 'red';
           }
         } else {
@@ -845,12 +936,13 @@ function renderDaily(d) {
   }
 
   var displayDate = d.date ? formatDisplayDate(d.date) : 'NO RECENT SHIFT FOUND';
+  var dailyReturns = d.dcr == null || d.dcr === '' ? 0 : d.dcr;
   var html = '<div class="date-card"><div class="date-card-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS.calendar + '</svg></div><div><div class="date-card-label">Shift Data Displayed</div><div class="date-card-value">' + esc(displayDate) + '</div></div></div>';
 
   html += '<div class="metric-2col">';
   html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
     { name:'POD', sub:'Photo on Delivery', val:d.pod, fmt:'pct', thresholds:[99.5,95] },
-    { name:'DCR', sub:'Delivery Completion Rate', val:d.dcr, fmt:'pct', thresholds:[99.5,95] }
+    { name:'Packages Returned', sub:'Daily Returns', val:dailyReturns, fmt:'dec', zeroBest:true }
   ], false) + '</div>';
 
   html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
@@ -912,7 +1004,7 @@ function renderWeekly(w) {
     ringLabel:'Overall',
     kicker:'Weekly Summary',
     title:'Performance Overview',
-    sub:'Week ' + w.week + ' - TBD - Fresno, CA',
+    sub:'Week ' + w.week + ' - ' + dspLocationLine(),
     rank:w.rank,
     total:w.total
   });
@@ -920,7 +1012,7 @@ function renderWeekly(w) {
   html += '<div class="metric-2col">';
   html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
     { name:'POD', sub:'Photo on Delivery', val:w.pod, fmt:'pct', thresholds:[99.5,95] },
-    { name:'DCR', sub:'Delivery Completion Rate', val:w.dcr, fmt:'pct', thresholds:[99.5,95] }
+    { name:'DC DPMO', sub:'Delivery Completion DPMO', val:w.dc, fmt:'dec', zeroBest:true }
   ], false) + '</div>';
 
   html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
@@ -992,7 +1084,7 @@ function computeRolling6(yearly) {
     overall:avgField(window6, 'overall'),
     sph:avgField(window6, 'sph'),
     pod:avgField(window6, 'pod'),
-    dcr:avgField(window6, 'dcr'),
+    dc:avgField(window6, 'dc'),
     dsb:avgField(window6, 'dsb'),
     cdfDpmo:avgField(window6, 'cdfDpmo'),
     speeding:yearly.speeding,
@@ -1006,7 +1098,7 @@ function computeRolling6(yearly) {
 function getMetricDefs(source, yearly, mode) {
   if (mode === 'yearly') {
     return [
-      { key:'dcr', label:'DCR', sub:'Delivery Completion Rate', val:source.dcr, fmt:'pct', dir:'high', t:[99.5,95] },
+      { key:'dc', label:'DC DPMO', sub:'Delivery Completion', val:source.dc, fmt:'dec', dir:'low', zeroBest:true, t:null },
       { key:'pod', label:'POD', sub:'Photo on Delivery', val:source.pod, fmt:'pct', dir:'high', t:[99.5,95] },
       { key:'sph', label:'SPH', sub:'Stops Per Hour', val:source.yearlySph, fmt:'dec', dir:'high', t:[20,18] },
       { key:'cdfDpmo', label:'CDF DPMO', sub:'Customer Defects', val:source.cdfDpmo, fmt:'dec', dir:'low', t:null },
@@ -1015,7 +1107,7 @@ function getMetricDefs(source, yearly, mode) {
   }
 
   return [
-    { key:'dcr', label:'DCR', sub:'Delivery Completion Rate', val:source.dcr, compare:yearly ? yearly.dcr : null, fmt:'pct', dir:'high', t:[99.5,95] },
+    { key:'dc', label:'DC DPMO', sub:'Delivery Completion', val:source.dc, compare:yearly ? yearly.dc : null, fmt:'dec', dir:'low', zeroBest:true, t:null },
     { key:'pod', label:'POD', sub:'Photo on Delivery', val:source.pod, compare:yearly ? yearly.pod : null, fmt:'pct', dir:'high', t:[99.5,95] },
     { key:'sph', label:'SPH', sub:'Stops Per Hour', val:source.sph, compare:yearly ? yearly.yearlySph : null, fmt:'dec', dir:'high', t:[20,18] },
     { key:'cdfDpmo', label:'CDF DPMO', sub:'Customer Defects', val:source.cdfDpmo, compare:yearly ? yearly.cdfDpmo : null, fmt:'dec', dir:'low', t:null },
@@ -1045,6 +1137,7 @@ function metricColor(mc, value, rankInfo) {
   }
 
   if (mc.t && !isNaN(n)) return n >= mc.t[0] ? 'var(--success)' : n >= mc.t[1] ? 'var(--warning)' : 'var(--danger)';
+  if (mc.zeroBest && !isNaN(n)) return n === 0 ? 'var(--success)' : 'var(--danger)';
   return 'var(--text-muted)';
 }
 
@@ -1118,7 +1211,7 @@ function renderRolling6(yearly) {
     ringLabel:'Avg',
     kicker:'Rolling 6-Week Average',
     title:'Recent Trend',
-    sub:r6.windowLabel + ' - TBD',
+    sub:r6.windowLabel + ' - ' + DSP_CONFIG.shortCode,
     rank:yearly ? yearly.rank : null,
     total:yearly ? yearly.total : null,
     extra:r6.weekCount + ' week' + (r6.weekCount !== 1 ? 's' : '') + ' included in average'
@@ -1130,7 +1223,7 @@ function renderRolling6(yearly) {
   html += '<div class="metric-2col">';
   html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
     { name:'POD Avg', sub:'Photo on Delivery', val:r6.pod, fmt:'pct', thresholds:[99.5,95] },
-    { name:'DCR Avg', sub:'Delivery Completion Rate', val:r6.dcr, fmt:'pct', thresholds:[99.5,95] }
+    { name:'DC DPMO Avg', sub:'Delivery Completion', val:r6.dc, fmt:'dec', zeroBest:true }
   ], false) + '</div>';
 
   html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
@@ -1185,7 +1278,7 @@ function renderYearly(y) {
     ringLabel:'Avg',
     kicker:'2026 Average Score',
     title:'Season Overview',
-    sub:'All Weeks - TBD - TBD, CA',
+    sub:'All Weeks - ' + dspLocationLine(),
     rank:y.rank,
     total:y.total
   });
@@ -1196,7 +1289,7 @@ function renderYearly(y) {
   html += '<div class="metric-2col">';
   html += '<div>' + sectionHeader('Delivery Quality', ICONS.check) + buildListHtml([
     { name:'POD Avg', sub:'Photo on Delivery', val:y.pod, fmt:'pct', thresholds:[99.5,95] },
-    { name:'DCR Avg', sub:'Delivery Completion Rate', val:y.dcr, fmt:'pct', thresholds:[99.5,95] }
+    { name:'DC DPMO Avg', sub:'Delivery Completion', val:y.dc, fmt:'dec', zeroBest:true }
   ], false) + '</div>';
 
   html += '<div>' + sectionHeader('Delivery Speed', ICONS.clock) + buildListHtml([
@@ -1252,7 +1345,7 @@ function buildHistoryTable(hist, title) {
 
   var html = sectionHeader(title, ICONS.list, true);
   html += '<div class="table-wrap"><table class="score-table"><thead><tr>' +
-    ['Week','Overall','SPH','POD','DCR','DSB DPMO','CDF DPMO'].map(function(h){ return '<th>' + h + '</th>'; }).join('') +
+    ['Week','Overall','SPH','POD','DC DPMO','DSB DPMO','CDF DPMO'].map(function(h){ return '<th>' + h + '</th>'; }).join('') +
     '</tr></thead><tbody>';
 
   hist.forEach(function(row){
@@ -1260,7 +1353,7 @@ function buildHistoryTable(hist, title) {
       fmtCell(row.overall, false) +
       fmtCell(row.sph, false) +
       fmtCell(row.pod, true) +
-      fmtCell(row.dcr, true) +
+      fmtCell(row.dc, false) +
       fmtCell(row.dsb, false) +
       fmtCell(row.cdfDpmo, false) +
     '</tr>';
@@ -1293,15 +1386,15 @@ function iconWrap(svg) {
 function renderFocus(d, areaId, cardsId) {
   var areas = [];
   var podVal = d.pod;
-  var dcrVal = d.dcr;
+  var dcrVal = d.dcr != null && d.dcr !== '' ? d.dcr : d.dc;
   var sphVal = d.sph != null ? d.sph : d.weeklySph;
 
   if (podVal != null && pctValue(podVal) < 99.5) {
     areas.push({ icon:FOCUS_ICONS.pod, title:'Photo on Delivery (POD)', text:'Your photos need to meet Amazon quality standards. Step back to frame the package clearly in a safe, recognizable location. Avoid blurry images, poor lighting, people in frame, shadows, reflections, addresses, or license plates. Never photograph from inside the van or while holding the package. Always review before submitting.' });
   }
 
-  if (dcrVal != null && pctValue(dcrVal) < 99.5) {
-    areas.push({ icon:FOCUS_ICONS.dcr, title:'Delivery Completion Rate (DCR)', text:'This measures successful deliveries or valid returns. Always attempt delivery first. Call the customer and let it ring at least 12 seconds, send a text if no answer, and contact Driver Support when needed. Log every attempt immediately and use the correct RTS codes.' });
+  if (dcrVal != null && parseFloat(dcrVal) > 0) {
+    areas.push({ icon:FOCUS_ICONS.dcr, title:'DC DPMO / Packages Returned', text:'This measures delivery completion defects. Zero is the goal; any returned package or DC DPMO above zero needs attention. Always attempt delivery first, contact the customer when needed, use Driver Support when appropriate, and log every attempt with the correct RTS code.' });
   }
 
   if (sphVal != null && parseFloat(sphVal) < 20) {
@@ -1360,3 +1453,4 @@ function reObserve() {
 </script>
 </body>
 </html>
+```
